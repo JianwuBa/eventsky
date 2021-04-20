@@ -223,7 +223,7 @@
     .headerBg{
         background-image: url('../assets/header-bg.png');
     }
-  header{
+    header{
       width: 100%;
       height: 60px;
       position: fixed;

@@ -35,7 +35,7 @@ export default {
       position: fixed;
       left: 0;
       top: 0;
-      z-index: 10;
+      z-index: 10;background-image: linear-gradient(to bottom right,#1784FA, #2947C5, #0B3EA5);
   }
   .containers{
       width: 1100px;

@@ -11,12 +11,16 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
         {
-            path:'/',
+            path:'/home',
             component:()=> import('@/Home')
         },
         {
             path:"/register",
             component:()=> import("@/login/register")
+        },
+        {
+            path:"/login",
+            component:()=> import("@/login/login")
         }
     ]
 })
