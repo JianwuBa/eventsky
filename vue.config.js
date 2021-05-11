@@ -1,5 +1,17 @@
 module.exports = {
     devServer: {
         port: 8888,     // 端口号
+        // 配置代理跨域
+        proxy:{
+            // 指的是哪些请求会触发代理跨域，/指的是任意的请求都会触发
+            '/':{
+                // target指的是代理地址，我们需要代理请求的地址
+                target:'http://192.168.1.166:8086',
+                changeOrigin:true,
+                pathRewrite:{
+                    '^/':''
+                }
+            }
+        }
     }
 };
