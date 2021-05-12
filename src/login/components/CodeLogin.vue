@@ -1,15 +1,13 @@
 <template>
   <div>
-      <h1>验证码登录</h1>
+      <h1>asdasd</h1>
   </div>
 </template>
 
 <script>
-export default {
-    mounted(){
-        console.log("验证码登录")
+    export default {
+
     }
-}
 </script>
 
 <style>

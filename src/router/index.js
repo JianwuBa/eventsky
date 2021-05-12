@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
         {
-            path:'/home',
+            path:'/',
             component:()=> import('@/Home')
         },
         {
@@ -21,6 +21,10 @@ const router = new VueRouter({
         {
             path:"/login",
             component:()=> import("@/login/login")
+        },
+        {
+            path:"/info",
+            component:()=> import("@/account/info/index")
         }
     ]
 })
