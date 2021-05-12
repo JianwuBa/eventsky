@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+      <h1>修改密码</h1>
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
              <el-form-item label="原密码" prop="oldPass">
                 <el-input type="password" v-model="ruleForm.oldPass" ></el-input>
