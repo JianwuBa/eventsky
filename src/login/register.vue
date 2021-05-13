@@ -16,6 +16,7 @@
               </template>
             </el-input>
           </el-form-item>
+          <el-alert  v-if="errorMessage"  :title="errorMessageText" type="error"  center :closable="false"  show-icon> </el-alert>
           <el-button type="primary" size="medium" @click="registerInformation()">注册</el-button>
          
         </div>
@@ -41,7 +42,7 @@
         <div v-show="passwordState">
           <h1 class="tit"><span>设置密码</span></h1>
           <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="passwordForm.pass"></el-input>
+            <el-input type="password" v-model="passwordForm.pass" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" v-model="passwordForm.checkPass"></el-input>
@@ -55,14 +56,16 @@
       </div>
       <div class="login">
         <span>已有账号？</span>
-        <span style="color:#7FA7F7;cursor:pointer;">立即登录</span>
+        <span style="color:#7FA7F7;cursor:pointer;" @click="login">立即登录</span>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Head from "./components/LoginHead"
+import Footer from "./components/LoginFooter"
 export default {
   
   data() {
@@ -132,17 +135,27 @@ export default {
       //个人信息状态
       informationState:false,
       //注册密码状态
-      passwordState:false
+      passwordState:false,
+      //验证码显示状态
+      errorMessage:false,
+      errorMessageText:""
     };
   },
   components:{
-    Head
+    Head,
+    Footer
   },
   methods:{
-
+    login(){
+      this.$router.push({path:'/login'})
+    },
     registerCode(){
       this.$http.post("/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
         console.log(res)
+        if(res.data.rspCode == 400005){
+          this.errorMessage = true
+          this.errorMessageText = "该邮箱已注册"
+        }
       })
     },
     registerInformation(){
@@ -151,6 +164,11 @@ export default {
         if(res.data.rspCode == 1){
           this.emailCodeState = false;
           this.informationState = true;
+        }
+        
+        else if(res.data.rspCode == 400006){
+          this.errorMessage = true
+          this.errorMessageText = "验证码错误"
         }
       })
     },
@@ -162,7 +180,6 @@ export default {
           this.informationState = false;
           this.passwordState = true;
         } else {
-          console.log(2)
           console.log('error submit!!');
           return false;
         }
@@ -173,6 +190,14 @@ export default {
         if (valid) {
           this.$http.post("/account/signup_c?authCode="+this.authCode+"&company="+this.ruleForm.company+"&email="+this.target+"&fullName="+this.ruleForm.fullName+"&passwd="+this.passwordForm.pass+"&phone="+this.ruleForm.phone+"&position="+this.ruleForm.position+"").then(res=>{
             console.log(res)
+            if(res.data.rspCode == 1){
+              setTimeout(() => {
+                this.$router.push({path:'/info'})
+              }, 1000);
+            }
+            else if(res.data.rspCode == 1){
+              alert("注册失败")
+            }
           })
         } else {
           console.log('error submit!!');
@@ -251,5 +276,12 @@ export default {
         padding-top: 18px;
       }
     }
+    /deep/ .el-alert--error.is-light{
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      align-items: center;
+    }
   }
+  
 </style>

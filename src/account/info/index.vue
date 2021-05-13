@@ -20,7 +20,7 @@
                 </el-tabs>
             </div>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer></el-footer>
     </el-container>
   </el-container>
 </el-container>

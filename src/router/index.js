@@ -25,6 +25,14 @@ const router = new VueRouter({
         {
             path:"/info",
             component:()=> import("@/account/info/index")
+        },
+        {
+            path:"/forget-pass",
+            component:()=> import("@/login/forgetPassword")
+        },
+        {
+            path:"/reset-pass",
+            component:()=> import("@/login/resetPassword")
         }
     ]
 })

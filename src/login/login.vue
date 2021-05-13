@@ -10,7 +10,13 @@
                 <PassLogin v-if="isPass"></PassLogin>    
             </el-tab-pane>
         </el-tabs>
+         <div class="text">
+            <span @click="forgetPass">忘记密码   </span>
+            <span>｜ </span>
+            <span @click="register">新用户注册</span>
       </div>
+      </div>
+      <Footer></Footer>
     </div>
 </template>
 
@@ -18,16 +24,18 @@
 import Head from "./components/LoginHead"
 import CodeLogin from './components/CodeLogin'
 import PassLogin from './components/PassLogin'
+import Footer from "./components/LoginFooter"
 export default {
     components:{
         CodeLogin,
         PassLogin,
-        Head
+        Head,
+        Footer
     },
     data() {
       return {
           //默认第一个选项卡
-          activeName: "pass",
+          activeName: "code",
           isCode:true,
           isPass:true,
           labelPosition: 'top',
@@ -45,13 +53,19 @@ export default {
                 this.isCode = false;
                 this.isPass = true;
             }
+        },
+        forgetPass(){
+          this.$router.push({path:'/forget-pass'})
+        },
+        register(){
+          this.$router.push({path:'/register'})
         }
     }
 }
 </script>
 <style  lang="less" scoped>
   .container{
-    padding-top: 60px;
+    
     .login{
       width: 396px;
       margin: 150px auto 0;
@@ -66,5 +80,12 @@ export default {
   /deep/ .el-tabs__item{
     text-align: center;
     width: 50%;
+  }
+  .text{
+      text-align: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #75A6FE;
+      margin-top: 20px;
   }
 </style>

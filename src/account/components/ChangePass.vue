@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-      <h1>修改密码</h1>
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
              <el-form-item label="原密码" prop="oldPass">
                 <el-input type="password" v-model="ruleForm.oldPass" ></el-input>
             </el-form-item>
@@ -62,6 +61,12 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
+            this.$http.post("/account/update_passwd?newPasswd="+this.ruleForm.pass+"&oldPasswd="+this.ruleForm.oldPass+"").then(res =>{
+              console.log(res)
+              if(res.data.rspCode == 1){
+                alert("修改成功")
+              }
+            })
           } else {
             console.log('error submit!!');
             return false;
