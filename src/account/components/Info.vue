@@ -3,11 +3,11 @@
         <el-form>
             <el-form-item label="邮箱地址" >
                 <el-input :disabled="edit" :value="accountInfo.email"></el-input>
-                <p class="change" @click="dialogFormVisible = true">去修改</p>
+                <p class="change" @click="dialogEmailVisible = true">去修改</p>
             </el-form-item>
             <el-form-item label="手机号">
                 <el-input :disabled="edit" :value="accountInfo.phone"></el-input>
-                 <p class="change">去修改</p>
+                 <p class="change" @click="dialogTelVisible = true">去修改</p>
             </el-form-item>
         </el-form>
             <p class="line"></p>
@@ -24,9 +24,7 @@
             </el-form-item>
             <el-button type="success" @click="saveInfo('ruleForm')" class="saveInfo">保存</el-button>
         </el-form>
-
-
-        <el-dialog title="修改邮箱" :visible.sync="dialogFormVisible">
+        <el-dialog title="修改邮箱" :visible.sync="dialogEmailVisible" width="600px">
             <div class="form-container">
               <el-form :model="form">
                 <el-form-item label="" :label-width="formLabelWidth">
@@ -44,43 +42,66 @@
               </div>
             </div>
         </el-dialog>
+        <el-dialog title="验证手机号" :visible.sync="dialogTelVisible" width="600px">
+            <div class="form-container">
+              <el-form :model="phonrForm">
+                <el-form-item label="" :label-width="formLabelWidth">
+                  <el-input v-model="phonrForm.tel" autocomplete="off" placeholder="请输入手机号"></el-input>
+                </el-form-item>
+                <el-form-item label="" :label-width="formLabelWidth" class="email-code">
+                  <el-input v-model="phonrForm.code" autocomplete="off" placeholder="请输入6位验证码"></el-input>
+                  <el-button plain class="send-code" @click="getTelCode">发送验证码</el-button>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                  <el-alert :title="errorMessageText" v-if="errorMessage" type="error"  center :closable="false"  show-icon>
+                  </el-alert>
+                <el-button class="test-code" @click="testNewTel">验证</el-button>
+              </div>
+            </div>
+        </el-dialog>
   </div>
 </template>
 
 
 <script>
 export default {
-    data() {
+      data() {
         return {
           form: {
             email: '',
             code: ''
           },
+          phonrForm:{
+            tel:'',
+            code:''
+          },
           formLabelWidth: 'auto',
-          dialogFormVisible: false,
-            edit: true,
-            ruleForm: {
-                fullName: '',
-                position: '',
-                company: '',
-            },
-            accountInfo:{},
-        rules: {
-          fullName: [
-            {  required:true,message: '请输入活动名称', trigger: 'blur' },
-          ],
-          position: [
-            {  required:true,message: '请输入活动名称', trigger: 'blur' },
-          ],
-          company: [
-            {  required:true,message: '请输入活动名称', trigger: 'blur' },
-          ],
-        },
-        labelPosition: 'top',  
-        errorMessage:false,
-        errorMessageText:''
-      };
-    },
+          dialogEmailVisible: false,
+          dialogTelVisible: false,
+          edit: true,
+          ruleForm: {
+            fullName: '',
+            position: '',
+            company: '',
+          },
+          accountInfo:{},
+          rules: {
+            fullName: [
+              {  required:true,message: '请输入活动名称', trigger: 'blur' },
+            ],
+            position: [
+              {  required:true,message: '请输入活动名称', trigger: 'blur' },
+            ],
+            company: [
+              {  required:true,message: '请输入活动名称', trigger: 'blur' },
+            ],
+          },
+          labelPosition: 'top',  
+          errorMessage:false,
+          errorMessageText:''
+        };
+      },
     created(){
         this.getInfo()
     },
@@ -117,6 +138,12 @@ export default {
           console.log(res)
         })
       },
+      //修改手机号获取验证码
+      getTelCode(){
+        this.$http.post("/auth/send?target="+this.phonrForm.tel+"&type=PHONE_VALID").then( res => {
+          console.log(res)
+        })
+      },
       //验证新邮箱
       testNewEmail(){
         this.$http.post("/account/update_email?authCode="+this.form.code+"&email="+this.form.email+"").then( res => {
@@ -127,6 +154,22 @@ export default {
             this.accountInfo.email = this.form.email
           }
           else if(res.data.rspCode == 400006){
+            this.errorMessage = true
+            this.errorMessageText = "验证码错误"
+          }else if(res.data.rspCode == 0){
+            this.errorMessage = true
+            this.errorMessageText = "请求失败"
+          }
+        })
+      },
+      // 验证新手机号
+      testNewTel(){
+        this.$http.post("/account/update_phone?authCode="+this.phonrForm.code+"&phone="+this.phonrForm.code+"").then(res =>{
+          if(res.data.rspCode == 1){
+            this.errorMessage = false;
+            this.dialogFormVisible = false;
+            this.accountInfo.email = this.form.phone = this.phonrForm.tel;
+          }else if(res.data.rspCode == 400006){
             this.errorMessage = true
             this.errorMessageText = "验证码错误"
           }else if(res.data.rspCode == 0){

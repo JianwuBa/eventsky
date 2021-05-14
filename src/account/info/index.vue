@@ -7,23 +7,23 @@
         <el-container class="aside">
             <Aside></Aside>
         <el-container>
-        <el-main>
-            <InfoTit></InfoTit>
-            <div class="title">
-                <el-tabs v-model="activeName" @tab-click="LoginType">
-                    <el-tab-pane label="基本信息" name="info" :key="'info'">
-                        <Info></Info>
-                    </el-tab-pane>
-                    <el-tab-pane label="修改密码" name="changePass" :key="'changePass'">
-                        <ChangePass></ChangePass>
-                    </el-tab-pane>
-                </el-tabs>
-            </div>
-        </el-main>
-        <el-footer></el-footer>
+                <el-main>
+                    <InfoTit></InfoTit>
+                    <div class="title">
+                        <el-tabs v-model="activeName" @tab-click="LoginType">
+                            <el-tab-pane label="基本信息" name="info" :key="'info'">
+                                <Info></Info>
+                            </el-tab-pane>
+                            <el-tab-pane label="修改密码" name="changePass" :key="'changePass'">
+                                <ChangePass></ChangePass>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-main>
+                <el-footer></el-footer>
+            </el-container>
+        </el-container>
     </el-container>
-  </el-container>
-</el-container>
   </div>    
 </template>
 

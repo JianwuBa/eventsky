@@ -33,6 +33,10 @@ const router = new VueRouter({
         {
             path:"/reset-pass",
             component:()=> import("@/login/resetPassword")
+        },
+        {
+            path:"/compony",
+            component:()=> import("@/companySetup/index")
         }
     ]
 })
