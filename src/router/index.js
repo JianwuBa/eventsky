@@ -37,6 +37,18 @@ const router = new VueRouter({
         {
             path:"/compony",
             component:()=> import("@/companySetup/index")
+        },
+        {
+            path:"/event",
+            component:()=> import("@/event/create")
+        },
+        {
+            path:"/promote",
+            component:()=> import("@/promote/index")
+        },
+        {
+            path:"/ticketing",
+            component:()=> import("@/event/ticketing")
         }
     ]
 })
