@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-.el-header {
+    .el-header {
         box-shadow: 0px 2px 4px 0px rgba(180, 180, 180, 0.26);
         height: 60px;
         position: fixed;

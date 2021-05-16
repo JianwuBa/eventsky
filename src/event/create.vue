@@ -60,7 +60,7 @@
                             </div>
                             <el-form-item class="save-event-info">
                                 <div class="save-event-btn">
-                                <el-button type="primary" @click="submitForm('eventRuleForm')">立即创建</el-button>
+                                    <el-button type="primary" @click="submitForm('eventRuleForm')">立即创建</el-button>
                                 </div>
                             </el-form-item>
                         </el-form>
@@ -125,22 +125,6 @@
     };
 </script>
 <style lang="less" scoped>
-    
-    .el-header {
-        box-shadow: 0px 2px 4px 0px rgba(180, 180, 180, 0.26);
-        height: 60px;
-        position: fixed;
-        left: 0;
-        top: 0;
-        padding: 0;
-        width: 100%;
-    }
-    .aside{
-        margin-top: -1px;
-    }
-    .el-aside {
-        color: #333;
-    }
     .el-main{
         padding: 60px 0 0 190px;
         height: 100%;

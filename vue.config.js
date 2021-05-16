@@ -11,14 +11,6 @@ module.exports = {
                 pathRewrite:{
                     '^/':'/'
                 }
-            },
-            '/upload':{
-                // target指的是代理地址，需要代理请求的地址
-                target:'http://192.168.1.250:8070',
-                changeOrigin:true,
-                pathRewrite:{
-                    '^/':'/'
-                }
             }
         }
     }

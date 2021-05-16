@@ -37,11 +37,11 @@
                         <el-checkbox label="知乎" name="type"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-ite class="registers">
+                <el-form-item class="registers">
                     <div class="save-event-btn">
                     <el-button type="primary" @click="registerFormInfo('registerForm')">保存</el-button>
                     </div>
-                </el-form-ite>
+                </el-form-item>
             </el-form>
             
             

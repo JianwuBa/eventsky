@@ -8,22 +8,7 @@
                     <Head></Head>
                 </el-header>
                 <el-main>
-                    <div class="container">
-                        <div class="top-tit">
-                            <img src="@/assets/image/register-info.png"  alt="">
-                            <span>报名及票务</span>
-                        </div>
-                        <div class="nav">
-                            <el-tabs v-model="activeName" type="card" @tab-click="ticketType">
-                                <el-tab-pane label="票务" name="ticket">
-                                    <Ticket v-if="isTicket"></Ticket>
-                                </el-tab-pane>
-                                <el-tab-pane label="报名" name="register">
-                                    <Register v-if="isRegister"></Register>
-                                </el-tab-pane>
-                            </el-tabs>
-                        </div>
-                    </div>
+                    
                 </el-main>
             </el-container>
         </el-container>
@@ -31,48 +16,18 @@
 </template>
 
 <script>
-    import Head from "./components/Head"
-    import Aside from "./components/Aside"
-    import Ticket from "./components/Ticket"
-    import Register from "./components/Register"
+import Head from '@/event/components/Head'
+import Aside from '@/event/components/Aside'
     export default {
-        data() {
-            return {
-                labelPosition: 'top', 
-                activeName: 'ticket', 
-                isTicket:true,
-                isRegister:true,
-            };
-        },
         components:{
             Head,
-            Aside,
-            Ticket,
-            Register
-        },
-        methods: {
-            ticketType(tab) {
-                if(tab.name == 'ticket'){
-                    this.isTicket = true
-                    this.isRegister = false
-                }else if(tab.name == 'register'){
-                    this.isTicket = false
-                    this.isRegister = true
-                }
-            }
-        }
-    };
-</script>
-<style lang="less" scoped>
-    .nav{
-        /deep/ .el-tabs--card>.el-tabs__header .el-tabs__nav{
-            border: none;
-        }
-        /deep/ .el-tabs__item{
-            width: 160px;
+            Aside
         }
     }
-    .el-main{
+</script>
+
+<style lang="less" scoped>
+.el-main{
         padding: 0 0 0 190px;
         height: 100%;
         .container{
@@ -154,34 +109,4 @@
         box-shadow: 0px 1px 0px 0px #EEEEEE;
         width: 100%;
     }
-    /deep/ .el-tabs--top .el-tabs__item.is-top:nth-child(2){
-        padding: 0 52px;
-    }
-    /deep/ .el-tabs--top .el-tabs__item.is-top:last-child{
-        padding: 0 52px;
-    }
-    /deep/ .el-tabs--top  .el-tabs__item.is-active{
-        background: #597EF7;
-        border-radius: 6px 6px 0px 0px;
-        border: 1px solid #DDDDDD;
-        color: #fff;
-        margin: 0 10px;
-        line-height: 38px;
-        border: none;
-    }
-    /deep/ .el-tabs--top  .el-tabs__item{
-        background: #FFFFFF;
-        border-radius: 6px 6px 0px 0px;
-        border: 1px solid #DDDDDD;
-        border-bottom: none;
-    }
-    /deep/ .el-tabs__nav{
-        margin: 0 auto;
-        float: none;
-        text-align: center;
-    }
-    /deep/ .el-tabs__active-bar{
-        display: none;
-    }
-    
 </style>

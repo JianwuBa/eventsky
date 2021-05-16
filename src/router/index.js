@@ -49,6 +49,10 @@ const router = new VueRouter({
         {
             path:"/ticketing",
             component:()=> import("@/event/ticketing")
+        },
+        {
+            path:"/live",
+            component:()=> import("@/live/liveSet")
         }
     ]
 })
