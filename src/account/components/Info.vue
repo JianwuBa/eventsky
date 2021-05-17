@@ -111,7 +111,7 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
-            this.$http.post("/account/update_info?company="+this.ruleForm.company+"&fullName="+this.ruleForm.fullName+"&position="+this.ruleForm.position+"").then(res => {
+            this.$http.post("/user-service/account/update_info?company="+this.ruleForm.company+"&fullName="+this.ruleForm.fullName+"&position="+this.ruleForm.position+"").then(res => {
                 console.log(res)
             })
           } else {
@@ -122,7 +122,7 @@ export default {
       },
       // 获取当前账号基恩信息
       getInfo(){
-          this.$http.get("/account/info").then(res => {
+          this.$http.get("/user-service/account/info").then(res => {
               console.log(res)
               if(res.data.rspCode == 1){
                   this.accountInfo = res.data.data
@@ -134,19 +134,19 @@ export default {
       },
        //修改邮箱  获取验证码
       getEmailCode(){
-        this.$http.post("/auth/send?target="+this.form.email+"&type=EMAIL_VALID").then( res => {
+        this.$http.post("/user-service/auth/send?target="+this.form.email+"&type=EMAIL_VALID").then( res => {
           console.log(res)
         })
       },
       //修改手机号获取验证码
       getTelCode(){
-        this.$http.post("/auth/send?target="+this.phonrForm.tel+"&type=PHONE_VALID").then( res => {
+        this.$http.post("/user-service/auth/send?target="+this.phonrForm.tel+"&type=PHONE_VALID").then( res => {
           console.log(res)
         })
       },
       //验证新邮箱
       testNewEmail(){
-        this.$http.post("/account/update_email?authCode="+this.form.code+"&email="+this.form.email+"").then( res => {
+        this.$http.post("/user-service/account/update_email?authCode="+this.form.code+"&email="+this.form.email+"").then( res => {
           console.log(res)
           if(res.data.rspCode == 1){
             this.errorMessage = false;
@@ -164,7 +164,7 @@ export default {
       },
       // 验证新手机号
       testNewTel(){
-        this.$http.post("/account/update_phone?authCode="+this.phonrForm.code+"&phone="+this.phonrForm.code+"").then(res =>{
+        this.$http.post("/user-service/account/update_phone?authCode="+this.phonrForm.code+"&phone="+this.phonrForm.code+"").then(res =>{
           if(res.data.rspCode == 1){
             this.errorMessage = false;
             this.dialogFormVisible = false;

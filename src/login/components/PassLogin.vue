@@ -45,7 +45,7 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log("进来了")
-            this.$http.post("/account/login_c?email="+this.account.name+"&type=2&typeCode="+this.account.pass+"").then(res => {
+            this.$http.post("/user-service/account/login_c?email="+this.account.name+"&type=2&typeCode="+this.account.pass+"").then(res => {
               console.log(res)
               if(res.data.rspCode == 1){
                 setTimeout(() => {

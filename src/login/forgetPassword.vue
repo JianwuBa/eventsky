@@ -101,13 +101,13 @@ export default {
     methods:{
         //获取验证码
         registerCode(){
-            this.$http.post("/auth/send?target="+this.ruleForm.email+"&type=EMAIL_RESET_PASSWD").then(res=>{
+            this.$http.post("/user-service/auth/send?target="+this.ruleForm.email+"&type=EMAIL_RESET_PASSWD").then(res=>{
                 console.log(res);
             })
         },
         // 校验验证码
         submitCode(){
-            this.$http.post("/auth/check?target="+this.ruleForm.email+"&type=EMAIL_RESET_PASSWD&authCode="+this.ruleForm.code+"").then(res=>{
+            this.$http.post("/user-service/auth/check?target="+this.ruleForm.email+"&type=EMAIL_RESET_PASSWD&authCode="+this.ruleForm.code+"").then(res=>{
                 console.log(res);
                 if(res.data.rspCode == 400006){
                     
@@ -128,7 +128,7 @@ export default {
         resetPass(ruleFormPass){
             this.$refs[ruleFormPass].validate((valid) => {
                 if (valid) {
-                    this.$http.post("/account/reset_passwd?authCode="+this.ruleForm.code+"&email="+this.ruleForm.email+"&passwd="+this.ruleFormPass.pass+"").then(res => {
+                    this.$http.post("/user-service/account/reset_passwd?authCode="+this.ruleForm.code+"&email="+this.ruleForm.email+"&passwd="+this.ruleFormPass.pass+"").then(res => {
                         console.log(res)
                         if(res.data.rspCode == 1){
                             this.successMessage = true

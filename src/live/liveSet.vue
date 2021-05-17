@@ -3,12 +3,33 @@
         <el-container>
             <Aside></Aside>
             <el-container class="aside">
-                
                 <el-header class="event-create-head">
                     <Head></Head>
                 </el-header>
                 <el-main>
-                    
+                    <div class="top-tit">
+                        <img src="@/assets/image/register-info.png"  alt="">
+                        <span>基本信息</span>
+                    </div>
+                    <div class="live-content">
+                        <el-row :gutter="12">
+                            <el-col :span="12">
+                                <el-card shadow="always">
+                                直播主链接
+                                </el-card>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-card shadow="hover">
+                                观看链接
+                                </el-card>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-card shadow="never">
+                                报名链接
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </el-main>
             </el-container>
         </el-container>
@@ -28,11 +49,14 @@ import Aside from '@/event/components/Aside'
 
 <style lang="less" scoped>
 .el-main{
-        padding: 0 0 0 190px;
+    .live-content{
+        width: 888px;
+        margin: 0 auto;
+    }
+        padding: 0 0 0 210px;
         height: 100%;
         .container{
             position: relative;
-            
             .event-info{
                 margin: 0 auto;
                 padding: 20px 50px 70px 40px;

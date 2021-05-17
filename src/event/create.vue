@@ -24,32 +24,49 @@
                                 </el-form-item>
                                 <el-form-item label="活动类别" prop="eventType">
                                     <el-select v-model="eventRuleForm.eventType" placeholder="选择活动类别">
-                                        <el-option label="科技" value="keji"></el-option>
-                                        <el-option label="教育" value="jiaoyu"></el-option>
-                                        <el-option label="商务及创业" value="shangwu"></el-option>
-                                        <el-option label="招聘会" value="zhaopin"></el-option>
-                                        <el-option label="职业发展" value="zhiye"></el-option>
-                                        <el-option label="健康生活 " value="jiankang"></el-option>
-                                        <el-option label="市场推广" value="shichangtuig"></el-option>
-                                        <el-option label="娱乐" value="yule"></el-option>
-                                        <el-option label="旅游" value="lvyou"></el-option>
-                                        <el-option label="其他" value="qita"></el-option>
+                                        <el-option label="科技" value="1"></el-option>
+                                        <el-option label="教育" value="2"></el-option>
+                                        <el-option label="商务及创业" value="3"></el-option>
+                                        <el-option label="招聘会" value="4"></el-option>
+                                        <el-option label="职业发展" value="5"></el-option>
+                                        <el-option label="健康生活 " value="6"></el-option>
+                                        <el-option label="市场推广" value="7"></el-option>
+                                        <el-option label="娱乐" value="8"></el-option>
+                                        <el-option label="旅游" value="9"></el-option>
+                                        <el-option label="其他" value="10"></el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item prop="date" label="活动时间" required>
-                                    <el-date-picker
-                                    v-model="eventRuleForm.date"
-                                    type="datetimerange"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期"
-                                    :default-time="['12:00:00']">
-                                    </el-date-picker>
-                                </el-form-item>
+                                <el-row  :gutter="20">
+                                    <el-col :span="8">
+                                        <el-form-item prop="timeZoneVal" label="时区" required>
+                                            <el-select v-model="eventRuleForm.timeZoneVal" placeholder="请选择时区">
+                                                <el-option  v-for="(item , index) in eventRuleForm.timeZone"
+                                                    :key="index"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="16">
+                                        <el-form-item prop="date" label="活动时间" required>
+                                            <el-date-picker
+                                            v-model="eventRuleForm.date"
+                                            type="datetimerange"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            :default-time="['12:00:00']">
+                                            </el-date-picker>
+                                            {{eventRuleForm.date}}
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            
                                 <el-form-item label="活动形式" prop="eventForm">
                                     <el-radio-group v-model="eventRuleForm.eventForm">
-                                        <el-radio label="线上"></el-radio>
-                                        <el-radio label="线上+线下"></el-radio>
-                                        <el-radio label="线下"></el-radio>
+                                        <el-radio label="1">线上</el-radio>
+                                        <el-radio label="2">线上+线下</el-radio>
+                                        <el-radio label="3">线下</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                                 <el-form-item label="活动地址" prop="adress" placeholder="请输入活动名称">
@@ -78,6 +95,11 @@
     export default {
         data() {
             return {
+                //时区
+                
+                startDate:'',
+                //请求路径
+                requestUrl:'',
                 labelPosition: 'top',  
                 eventRuleForm: {
                     name: '',
@@ -85,7 +107,27 @@
                     eventType: '',
                     date: '',
                     eventForm: '',
-                    adress: ''
+                    adress: '',
+                    timeZoneVal:'',
+                    timeZone:[
+                        {
+                            value: '东八区',
+                            label: '东八区'
+                        },
+                        {
+                            value: '东九区',
+                            label: '东九区'
+                        },
+                        {
+                            value: '东十区',
+                            label: '东十区'
+                        },
+                        {
+                            value: '东七区',
+                            label: '东七区'
+                        },
+                    ],
+
                 },
                 createEventRules: {
                     name: [
@@ -102,7 +144,13 @@
                     ],
                     adress: [
                         { required: true, message: '填写活动地址', trigger: 'blur' },
-                    ]
+                    ],
+                    timeZoneVal: [
+                        { required: false, message: '请选择时区', trigger: 'change' },
+                    ],
+                    eventForm: [
+                        { required: true, message: '请选择活动形式', trigger: 'change' },
+                    ],
                 }
             };
         },
@@ -110,11 +158,30 @@
             Head,
             Aside,
         },
+            
         methods: {
+            dateFormat(data){
+                console.log(data) 
+                let dt = new Date(data)
+                let yyyy = dt.getFullYear()
+                let MM = (dt.getMonth() + 1).toString().padStart(2, '0')
+                let dd = dt.getDate().toString().padStart(2, '0')
+                let h = dt.getHours().toString().padStart(2, '0')
+                let m = dt.getMinutes().toString().padStart(2, '0')
+                let s = dt.getSeconds().toString().padStart(2, '0')
+                return yyyy + '-' + MM + '-' + dd + ' ' + h + ':' + m + ':' + s
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let start = this.dateFormat(this.eventRuleForm.date[0])
+                    let end = this.dateFormat(this.eventRuleForm.date[1])
+                    this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventType+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"").then(res => {
+                        console.log(res)
+                        if(res.data.rspCode == 1){
+                            alert(11)
+                        }
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;

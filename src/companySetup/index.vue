@@ -14,7 +14,7 @@
                             <div class="left">
                                 <div class="logo">
                                     <i v-if="defaultLogo" class="el-icon-office-building default-logo" ></i>
-                                    <img :src="logoUrl" alt="">
+                                    <img :src="componyForm.logoUrl" alt="">
                                 </div>
                                 <p class="name">{{componyForm.componyName}}</p>
                                 <el-upload  
@@ -24,7 +24,7 @@
                                     :disabled="upload.isUploading"
                                     :on-success="handleFileSuccess"
                                     :on-error="handleFileFail"
-
+                                    :file-list="filePostList"
                                     :on-change="updateImg"
                                     :on-progress="handleFileUploadProgress"
                                     drag
@@ -35,27 +35,28 @@
                             <div class="right">
                                 <el-form :model="componyForm" :rules="rules" ref="componyForm" :hide-required-asterisk="true">
                                     <el-form-item label="公司名称" prop="componyName">
-                                        <el-input v-model="componyForm.componyName" placeholder="请输入公司名称"></el-input>
+                                        <el-input v-model.lazy="componyForm.componyName" placeholder="请输入公司名称" :value="componyForm.componyName" ></el-input>
                                     </el-form-item>
                                     <el-form-item label="一句话简要介绍" prop="introduce">
-                                        <el-input v-model="componyForm.introduce" placeholder="一句话简要介绍"></el-input>
+                                        <el-input v-model="componyForm.introduce" placeholder="一句话简要介绍" :value="componyForm.introduce"></el-input>
                                     </el-form-item>
                                     <el-form-item label="公司域名" prop="link">
-                                        <el-input placeholder="填写公司专属域名（支持数字和英文字母的组合，3到20个字符）"  v-model="componyForm.link">
-                                            <template slot="prepend">Http://</template>
-                                            <template slot="append">.com</template>
+                                        <el-input placeholder="填写公司专属域名（支持数字和英文字母的组合，3到20个字符）" :value="componyForm.link" v-model="componyForm.link">
+                                            <template slot="prepend">https://</template>
+                                            <template slot="append">.eventsky.cn</template>
                                         </el-input>
                                     </el-form-item>
+                                     <div class="compony-code">
+                                        <p class="tit">公司二维码</p>
+                                        
+                                        <img :src="componyForm.codeUrl" alt="">
+                                        <el-button type="primary" class="save" @click="submitComponyInfo('componyForm')">确认</el-button>
+                                    </div>
                                 </el-form>
                             </div>
 
                         </div>
-                        <div class="compony-code">
-                            <p class="tit">公司二维码</p>
-                            
-                            <img src="" alt="">
-                            <el-button type="primary" class="save" @click="submitComponyInfo('componyForm')">确认</el-button>
-                        </div>
+                       
                     </div>
                 </el-main>
                 <el-footer></el-footer>
@@ -75,20 +76,25 @@ export default {
     },
     data() {
       return {
+        filePostList:[],
+        
         componyForm:{
             componyName:'',
             introduce:'',
-            link:''
+            link:'',
+            codeUrl:'',
+            //logo图片显示的url
+            logoUrl:''
         },
         rules:{
             componyName: [
                 { required: true, message: '请输入公司名称', trigger: 'blur' },
             ],
             introduce: [
-                { required: true, message: '一句话简要介绍', trigger: 'change' }
+                { required: false, message: '一句话简要介绍', trigger: 'change'}
             ],
             link: [
-                { type: 'date', required: true, message: '填写公司专属域名（支持数字和英文字母的组合，3到20个字符）', trigger: 'change' }
+                { required: true, message: '填写公司专属域名（支持数字和英文字母的组合，3到20个字符）', trigger: 'change' }
             ],
         },
         upload: {
@@ -102,27 +108,44 @@ export default {
             // 设置上传的请求头部
             
             // 上传的地址
-            url:'/upload'
+            url:'/file-service/upload'
            
         },
-        //logo图片显示的url
-        logoUrl:'',
+        
         // 默认公司logo
         defaultLogo:true,
 
       };
     },
+    created(){
+        this.getComponyInfo()
+    },
     methods: {
+       
         //公司信息提交
         submitComponyInfo(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    this.$http.post("/user-service/company/update_info?barcodeUrl="+this.componyForm.codeUrl+"&companyIntro="+this.componyForm.introduce+"&companyName="+this.componyForm.componyName+"&domain="+this.componyForm.link+"&logoUrl="+this.componyForm.logoUrl+"").then(res =>{
+                        console.log(res)
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
+        },
+        getComponyInfo(){
+            this.$http.get("/user-service/company/info").then(res => {
+                console.log(res)
+                if(res.data.rspCode == 1){
+                    this.componyForm.componyName =  res.data.data.companyName
+                    this.componyForm.introduce =  res.data.data.companyIntro
+                    this.componyForm.link =  res.data.data.domain
+                    this.componyForm.codeUrl = res.data.data.barcodeUrl
+                    this.componyForm.logoUrl = res.data.data.logoUrl
+                }
+            })
         },
         handleRemove(file) {
             console.log(file);
@@ -139,7 +162,7 @@ export default {
             console.log(response)
             console.log(file)
             console.log(fileList)
-            this.logoUrl = response.filePath
+            this.componyForm.logoUrl = response.filePath
             this.defaultLogo = false
         },
         // 文件上传失败
@@ -154,11 +177,9 @@ export default {
             console.log(event,file,fileList)
             //this.upload.isUploading = true
         },
-        updateImg(file, fileList){
-            console.log(file,fileList)
-            this.fileList = fileList.slice(-1)
-        }
-
+         updateImg(file, fileList) {
+            this.filePostList = fileList.slice(-1);
+        },
     }
 }
 </script>
@@ -175,6 +196,10 @@ export default {
     .el-aside {
         color: #333;
     }
+    .main-container{
+        width: 820px;
+        margin: 0 auto;
+    }
     .el-main{
         padding: 0;
         padding-left: 190px;
@@ -188,11 +213,11 @@ export default {
         .compony-setup{
             display: flex;
             padding-top: 50px;
+            justify-content: space-between;
             .left{
-                width: 45%;
-                text-align: center;
+                width:140px;
                 .logo{
-                    width: 140px;
+                    width: 100%;
                     height: 140px;
                     border-radius: 50%;
                     border: 1px solid #C9C9C9;
@@ -201,6 +226,7 @@ export default {
                     line-height: 140px;
                     position: relative;
                     overflow: hidden;
+                    margin-right: 62px;
                     img{
                         margin: auto;
                         position: absolute;
@@ -221,6 +247,7 @@ export default {
                     font-size: 18px;
                     color: #000;
                     margin-top: 10px;
+                    text-align: center;
                 }
                 /deep/ .el-upload-dragger{
                     width: 100%;
@@ -233,9 +260,12 @@ export default {
                         cursor: pointer;    
                     }
                 }
+                /deep/ .el-upload{
+                    display: block;
+                }
             }
             .right{
-                width: 55%;
+                width: 618px;
                 /deep/ .el-form-item{
                     margin-bottom: 10px;
                 }

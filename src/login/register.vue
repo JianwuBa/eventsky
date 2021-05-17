@@ -150,7 +150,7 @@ export default {
       this.$router.push({path:'/login'})
     },
     registerCode(){
-      this.$http.post("/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
+      this.$http.post("/user-service/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
         console.log(res)
         if(res.data.rspCode == 400005){
           this.errorMessage = true
@@ -159,7 +159,7 @@ export default {
       })
     },
     registerInformation(){
-      this.$http.post("/auth/check?type=EMAIL_SIGNUP&target="+this.target+"&authCode="+this.authCode+"").then(res =>{
+      this.$http.post("/user-service/auth/check?type=EMAIL_SIGNUP&target="+this.target+"&authCode="+this.authCode+"").then(res =>{
         console.log(res)
         if(res.data.rspCode == 1){
           this.emailCodeState = false;
@@ -188,7 +188,7 @@ export default {
     submitPassword(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$http.post("/account/signup_c?authCode="+this.authCode+"&company="+this.ruleForm.company+"&email="+this.target+"&fullName="+this.ruleForm.fullName+"&passwd="+this.passwordForm.pass+"&phone="+this.ruleForm.phone+"&position="+this.ruleForm.position+"").then(res=>{
+          this.$http.post("/user-service/account/signup_c?authCode="+this.authCode+"&company="+this.ruleForm.company+"&email="+this.target+"&fullName="+this.ruleForm.fullName+"&passwd="+this.passwordForm.pass+"&phone="+this.ruleForm.phone+"&position="+this.ruleForm.position+"").then(res=>{
             console.log(res)
             if(res.data.rspCode == 1){
               setTimeout(() => {

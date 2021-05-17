@@ -60,7 +60,7 @@ export default {
       savePassword(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.post("/account/update_passwd?newPasswd="+this.ruleForm.pass+"&oldPasswd="+this.ruleForm.oldPass+"").then(res =>{
+            this.$http.post("user-service/account/update_passwd?newPasswd="+this.ruleForm.pass+"&oldPasswd="+this.ruleForm.oldPass+"").then(res =>{
               console.log(res)
               if(res.data.rspCode == 1){
                 alert("修改成功")

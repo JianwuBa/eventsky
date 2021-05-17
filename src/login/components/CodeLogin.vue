@@ -43,14 +43,14 @@
       },
       methods:{
         registerCode(){
-          this.$http.post("/auth/send?target="+this.formName.email+"&type=EMAIL_LOGIN").then(res => {
+          this.$http.post("/user-service/auth/send?target="+this.formName.email+"&type=EMAIL_LOGIN").then(res => {
             console.log(res)
           })
         },
         authCodeLogin(formName){
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.$http.post("/account/login_c?email="+this.formName.email+"&type=1&typeCode="+this.formName.authCode+"").then(res=>{
+              this.$http.post("/user-service/account/login_c?email="+this.formName.email+"&type=1&typeCode="+this.formName.authCode+"").then(res=>{
                 console.log(res)
                 if(res.data.rspCode == 1){
                   setTimeout(() => {
