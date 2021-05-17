@@ -158,7 +158,6 @@
             Head,
             Aside,
         },
-            
         methods: {
             dateFormat(data){
                 console.log(data) 
