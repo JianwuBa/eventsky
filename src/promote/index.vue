@@ -16,7 +16,18 @@
                         <el-form >
                             <el-form-item >
                                 <h4 class="tit">活动详情</h4>
-                                <Editor></Editor>
+                                      {{ msg }}
+                                        <tinymce-editor ref="editor"
+                                        v-model="msg"
+                                        :disabled="disabled"
+                                        :base-url="baseUrl"
+                                        :language="language"
+                                        :skin="skin"
+                                        @onClick="onClick">
+                                        </tinymce-editor>
+                                        <button @click="clear">清空内容</button>
+                                        <button @click="disabled = true">禁用</button>
+                                        <button @click="disabled = false">启用</button>
                             </el-form-item>
                             <el-form-item >
                                 <h4 class="tit">上传活动横幅 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：1200x420px</span></h4>
@@ -57,7 +68,7 @@
                                     </div>
                                         <div class="video">
                                             <h4 class="tit">添加活动视频</h4>
-                                            <el-select placeholder="选择活动类别">
+                                            <el-select placeholder="选择活动类别" v-model="value">
                                                 <el-option label="优酷" value="1"> </el-option>
                                                 <el-option label="腾讯" value="2"> </el-option>
                                                 <el-option label="爱奇艺" value="3"> </el-option>
@@ -90,17 +101,26 @@
 </template>
 
 <script>
-    import Head from "@/event/components/Head"
-    import Aside from "@/event/components/Aside"
-    import Editor from "@/promote/components/Editor"
+    import {Head} from "@/event/components/Head"
+    import {Aside} from "@/event/components/Aside"
+    import TinymceEditor from "./components/tinymce-editor"
+    import 'tinymce/icons/default/icons.min.js'
     export default {
         components:{
             Head,
             Aside,
-            Editor
+            TinymceEditor
         },
         data(){
             return {
+                value:'',
+                //编辑器
+                msg: 'Welcome to Use Tinymce Editor-liubing.me',
+                disabled: false,
+                baseUrl: process.env.NODE_ENV === 'production' ? '/vue-use-tinymce' : '',
+                language: 'zh_CN',
+                skin: 'oxide',
+
                 upload:{
                     url:'/file-service/upload',
                 },
@@ -149,6 +169,16 @@
                 console.log(fileList)
                 alert("上传失败")
             },
+            // 鼠标单击的事件
+    onClick (e, editor) {
+      console.log('Element clicked')
+      console.log(e)
+      console.log(editor)
+    },
+    // 清空内容
+    clear () {
+      this.$refs.editor.clear()
+    }
         }
     }
 </script>
