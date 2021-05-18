@@ -44,7 +44,6 @@ export default {
       Login(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log("进来了")
             this.$http.post("/user-service/account/login_c?email="+this.account.name+"&type=2&typeCode="+this.account.pass+"").then(res => {
               console.log(res)
               if(res.data.rspCode == 1){
@@ -54,7 +53,10 @@ export default {
               }else if(res.data.rspCode == 0){
                 this.errorMessage = true
                 this.errorMessageText = "密码错误"
-              } 
+              } else if(res.data.rspCode == 400002){
+                 this.errorMessage = true
+                this.errorMessageText = "账号不存在"
+              }
             })
           } else {
             console.log('error submit!!');

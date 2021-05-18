@@ -22,10 +22,15 @@
                                 <h4 class="tit">上传活动横幅 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：1200x420px</span></h4>
                                 <div class="banner">
                                     <img src="../assets/image/default-img.png" class="default" v-if="defaultBan" alt="">
+                                    <img :src="bannerUrl" class="" v-if="!defaultBan" alt="">
                                 </div>
                                 <el-upload
-                                    action="https://jsonplaceholder.typicode.com/posts/"
+                                    ref="upload"
+                                    name="eskFile"
+                                    :action="upload.url"
                                     :on-change="handleBanChange"
+                                    :on-success="handleBanSuccess"
+                                    :on-error="handleBanFail"
                                     :file-list="fileBanList">
                                     <el-button >点击上传</el-button>
                                     
@@ -36,21 +41,29 @@
                                     <div class="post">
                                         <h4 class="tit">上传活动海报 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：750x1334px</span></h4>
                                         <div class="banner">
-                                            <img src="../assets/image/default-img.png" class="default" v-if="defaultBan" alt="">
+                                            <img src="../assets/image/default-img.png" class="default" v-if="defaultPost" alt="">
+                                            <img :src="postUrl" class="" v-if="!defaultPost" alt="">
                                         </div>
                                         <el-upload
-                                            action="https://jsonplaceholder.typicode.com/posts/"
-                                            :on-change="handlePostChange"
-                                            :file-list="filePostList">
+                                                ref="upload"
+                                                name="eskFile"
+                                                :action="upload.url"
+                                                :on-change="handlePostChange"
+                                                :on-success="handlePostSuccess"
+                                                :on-error="handlePostFail"
+                                                :file-list="filePostList">
                                             <el-button >上传海报</el-button>
                                         </el-upload>
                                     </div>
                                         <div class="video">
                                             <h4 class="tit">添加活动视频</h4>
                                             <el-select placeholder="选择活动类别">
-                                                <el-option label="腾讯" value="tx"></el-option>
-                                                <el-option label="优酷" value="yk"></el-option>
-                                                <el-option label="爱奇艺" value="aqy"></el-option>
+                                                <el-option label="优酷" value="1"> </el-option>
+                                                <el-option label="腾讯" value="2"> </el-option>
+                                                <el-option label="爱奇艺" value="3"> </el-option>
+                                                <el-option label="芒果" value="4">  </el-option>
+                                                <el-option label="YouTube" value="5">  </el-option>
+                                                <el-option label="其他" value="6">  </el-option>
                                             </el-select>
                                        <el-input
                                             type="textarea"
@@ -63,7 +76,7 @@
                             </el-form-item>
                             <el-form-item class="save-event-info">
                                 <div class="save-event-btn">
-                                    <el-button type="primary" @click="submitForm('')">立即创建</el-button>
+                                    <el-button type="primary" >立即创建</el-button>
                                 </div>
                             </el-form-item>
 
@@ -88,11 +101,15 @@
         },
         data(){
             return {
+                upload:{
+                    url:'/file-service/upload',
+                },
                 fileBanList: [],
                 filePostList:[],
                 bannerUrl:'',
                 defaultBan:true,
-                videoLink:''
+                defaultPost:true,
+                videoLink:'',
             }
         },
         methods:{
@@ -101,6 +118,36 @@
             },
             handlePostChange(file, fileList) {
                 this.filePostList = fileList.slice(-1);
+            },
+            //ban上传成功
+            handleBanSuccess(response, file, fileList){
+                console.log(response)
+                console.log(file)
+                console.log(fileList)
+                this.bannerUrl = response.filePath
+                this.defaultBan = false
+            },
+            // ban上传失败
+            handleBanFail(err, file, fileList){
+                console.log(err)
+                console.log(file)
+                console.log(fileList)
+                alert("上传失败")
+            },
+            //post上传成功
+            handlePostSuccess(response, file, fileList){
+                console.log(response)
+                console.log(file)
+                console.log(fileList)
+                this.postUrl = response.filePath
+                this.defaultPost = false
+            },
+            // post上传失败
+            handlePostFail(err, file, fileList){
+                console.log(err)
+                console.log(file)
+                console.log(fileList)
+                alert("上传失败")
             },
         }
     }

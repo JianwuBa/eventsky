@@ -1,5 +1,4 @@
 <template>
-        
         <quill-editor v-model="content" ref="myQuillEditor" style="height: 400px;width:713px"  :options="editorOption">
         </quill-editor>
 </template>
@@ -43,12 +42,13 @@
                     ImageExtend: {
                         loading: true,  // 可选参数 是否显示上传进度和提示语
                         name: 'img',  // 图片参数名
-                        size: 3,  // 可选参数 图片大小，单位为M，1M = 1024kb
-                        action: '',  // 服务器地址, 如果action为空，则采用base64插入图片
+                        size: 8,  // 可选参数 图片大小，单位为M，1M = 1024kb
+                        action: '/file-service/upload',  // 服务器地址, 如果action为空，则采用base64插入图片
                         // response 为一个函数用来获取服务器返回的具体图片地址
                         // 例如服务器返回{code: 200; data:{ url: 'baidu.com'}}
                         // 则 return res.data.url
                         response: (res) => {
+                            console.log(res)
                             return res.info
                         },
                         headers: (xhr) => {
@@ -63,11 +63,6 @@
                     },
                     toolbar: {
                         container: container,  // container为工具栏，此次引入了全部工具栏，也可自行配置
-                        // handlers: {
-                        //     'image': function () {  // 劫持原来的图片点击按钮事件
-                        //         document.querySelector('.quill-image-input').click()
-                        //     }
-                        // }
                     }
                 }
             }

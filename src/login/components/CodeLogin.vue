@@ -7,7 +7,7 @@
           <el-form-item label="验证码" prop="authCode">
             <el-input v-model="formName.authCode" placeholder="请输入验证码">
               <template slot="append">
-                <el-button type="primary" @click="registerCode()">发送验证码</el-button>
+                <el-button type="primary" @click="registerCode()" :disabled="btnDisabled" :class="{btnDisabled}">发送验证码</el-button>
                 <span v-show="!show" class="count">{{count}} </span>
               </template>
             </el-input>
@@ -24,6 +24,7 @@
     export default {
       data(){
         return{
+          btnDisabled:false,
           show: true,
           count: '',
           timer: null,
@@ -47,24 +48,27 @@
       },
       methods:{
         registerCode(){
-          
-          const TIME_COUNT = 10;
-          if (!this.timer) {
-            this.count = TIME_COUNT;
-            this.show = false;
-            this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= TIME_COUNT) {
-              this.count--;
-              } else {
-              this.show = true;
-              clearInterval(this.timer);
-              this.timer = null;
-              }
-            }, 1000)
-            }
           this.$http.post("/user-service/auth/send?target="+this.formName.email+"&type=EMAIL_LOGIN").then(res => {
             console.log(res)
-          })
+            if(res.data.rspCode == 1){
+              const TIME_COUNT = 60;
+            if (!this.timer) {
+              this.count = TIME_COUNT;
+              this.show = false;
+              this.timer = setInterval(() => {
+                if (this.count > 0 && this.count <= TIME_COUNT) {
+                  this.count--;
+                  this.btnDisabled = true
+                  } else {
+                  this.show = true;
+                  this.btnDisabled = false
+                  clearInterval(this.timer);
+                  this.timer = null;
+                  }
+                }, 1000)
+              }
+            }
+            })
         },
         authCodeLogin(formName){
           this.$refs[formName].validate((valid) => {
@@ -108,6 +112,10 @@
     border: none;
     color: #fff;
     margin-left: 10px;
+  }
+  /deep/ .el-input-group__append.btnDisabled{
+    color: #c0c4cc;
+    border-color: #ebeef5;
   }
   /deep/ .el-alert--error.is-light{
       margin: 0;

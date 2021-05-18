@@ -21,12 +21,10 @@
                                     name="eskFile"
                                     ref="upload"
                                     :action="upload.url"
-                                    :disabled="upload.isUploading"
                                     :on-success="handleFileSuccess"
                                     :on-error="handleFileFail"
                                     :file-list="filePostList"
                                     :on-change="updateImg"
-                                    :on-progress="handleFileUploadProgress"
                                     drag
                                 >
                                 <p class="name">上传公司 logo</p>
@@ -98,18 +96,7 @@ export default {
             ],
         },
         upload: {
-            // 弹出层标题（用户导入）
-            title: '',
-            // 是否禁用上传
-            isUploading: false,
-            businessType: 'TDataCatalog',
-            // 是否更新已经存在的用户数据
-            // updateSupport: 0,
-            // 设置上传的请求头部
-            
-            // 上传的地址
             url:'/file-service/upload'
-           
         },
         
         // 默认公司logo
@@ -172,11 +159,7 @@ export default {
             console.log(fileList)
             alert("上传失败")
         },
-        //
-        handleFileUploadProgress(event, file, fileList){
-            console.log(event,file,fileList)
-            //this.upload.isUploading = true
-        },
+        
          updateImg(file, fileList) {
             this.filePostList = fileList.slice(-1);
         },
