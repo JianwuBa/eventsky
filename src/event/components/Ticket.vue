@@ -134,6 +134,17 @@ export default {
         saveInfo(addTicketInfoForm) {
             this.$refs[addTicketInfoForm].validate((valid) => {
                 if (valid) {
+                    console.log(this.addTicketInfoForm.ticCurrency)
+                    console.log(this.addTicketInfoForm.ticCurrencyVal)
+                    this.tableData.push({
+                        ticName:this.addTicketInfoForm.ticName,
+                        ticType:this.addTicketInfoForm.ticTypeVal,
+                        ticNum:this.addTicketInfoForm.ticNum,
+                        ticPrice:this.addTicketInfoForm.ticPrice,
+                        ticCurrency:this.addTicketInfoForm.ticCurrencyVal,
+                    })
+                    this.addTicketInfoForm = {};
+                    this.dialog = false;
                     this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId+"?amount="+this.addTicketInfoForm.ticPrice+"&count="+this.addTicketInfoForm.ticNum+"&currency="+this.addTicketInfoForm.ticCurrencyVal+"&listOrder=1&id=1&title="+this.addTicketInfoForm.ticName+"&type="+this.addTicketInfoForm.ticTypeVal+"&webId="+this.eventId+"").then(res => {
                         if(res.data.rspCode == 1){
                             alert("添加成功")
