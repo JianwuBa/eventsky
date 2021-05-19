@@ -1,20 +1,26 @@
 <template>
-  <div class="tickets">
-    <h4 class="tit">创建门票 <span @click="add=true;dialog = true">+添加新票种</span></h4>
-        <el-form :inline="true" :model="addTicketInfoForm" ref="addTicketInfoForm" class="demo-form-inline">
+    <div class="tickets">
+        <h4 class="tit">创建门票 <span @click="add=true;dialog = true">+添加新票种</span></h4>
+        <el-form :model="addTicketInfoForm" :rules="ticketRules" ref="addTicketInfoForm" >
             <!-- 弹出框 -->
                 <el-dialog
                     :close-on-click-modal="false"
                     :append-to-body="true"
                     :title="add?'添加新票种':'修改票种'"
                     :visible.sync="dialog"
-                    :before-close="handleClose"
                 >
                 <el-form-item label="名称" prop="ticName">
                     <el-input v-model="addTicketInfoForm.ticName" placeholder=""></el-input>
                 </el-form-item>
                 <el-form-item label="种类" prop="ticType">
-                    <el-input v-model="addTicketInfoForm.ticType" placeholder=""></el-input>
+                    <el-select v-model="addTicketInfoForm.ticTypeVal" placeholder="请选择">
+                        <el-option
+                        v-for="item in addTicketInfoForm.ticType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="数量" prop="ticNum">
                     <el-input v-model="addTicketInfoForm.ticNum" placeholder=""></el-input>
@@ -23,11 +29,18 @@
                     <el-input v-model="addTicketInfoForm.ticPrice" placeholder=""></el-input>
                 </el-form-item>
                 <el-form-item label="币种" prop="ticCurrency">
-                    <el-input v-model="addTicketInfoForm.ticCurrency" placeholder=""></el-input>
+                     <el-select v-model="addTicketInfoForm.ticCurrencyVal" placeholder="请选择">
+                        <el-option
+                        v-for="item in addTicketInfoForm.ticCurrency"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <div class="dialog-footer" slot="footer">
                     <el-button type="primary" @click="dialog = false">取 消</el-button>
-                    <el-button type="success" icon="el-icon-download" @click="saveInfo(addTicketInfoForm)">保存</el-button>
+                    <el-button type="success" @click="saveInfo('addTicketInfoForm')">保存</el-button>
                 </div>
             </el-dialog>
         </el-form>
@@ -46,7 +59,7 @@
                 </template>
             </el-table-column>
         </el-table>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -54,9 +67,54 @@ export default {
     name: "index",
     data() {
         return {
+            eventId:'',
+            requestUrl:'/event-service',
+            addTicketInfoForm:{
+                ticName:'',
+                ticTypeVal:'',
+                ticType:[
+                    {
+                        value: 1,
+                        label: '免费'
+                    },
+                    {
+                        value: 2,
+                        label: '收费'
+                    },
+                ],
+                ticNum:'',
+                ticPrice:'',
+                ticCurrencyVal:'',
+                ticCurrency:[
+                    {
+                        value: '美元',
+                        label: '美元'
+                    },
+                    {
+                        value: '人民币',
+                        label: '人民币'
+                    },
+                ]
+            },
+            ticketRules:{
+                ticName: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                ticType: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                ticNum: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                ticPrice: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                 ticCurrency: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+            },
             labelPosition: 'top',
             // dialog表单数据
-            addTicketInfoForm: {},
             // table的数据
             tableData: [],
             // 新增弹出框
@@ -67,57 +125,35 @@ export default {
     },
     // 模板渲染成html前调用
     created() {
-        this.getdata();
+        let webId = this.$route.params.pathMatch
+        this.eventId = webId
     },
-    // 在模板渲染成html后调用
     methods: {
-        // 新增弹出框
-        handleClose(done) {
-            done();
-            this.addTicketInfoForm = {};
-        },
-        // 获取数据
-        getdata() {
-            // 定义的获取数据的方法
-            this.tableData = JSON.parse(localStorage.getItem("form") || "[]");
-        },
-        // 新增弹出框
+       
         // 保存数据
         saveInfo(addTicketInfoForm) {
-        if (this.add == true) {
-            if(
-            this.addTicketInfoForm.ticName && 
-            this.addTicketInfoForm.ticType &&
-            this.addTicketInfoForm.ticNum &&
-            this.addTicketInfoForm.ticPrice &&
-            this.addTicketInfoForm.ticCurrency 
-            ){
-            this.tableData.push(addTicketInfoForm);
-            console.log(this.tableData)
-            localStorage.setItem("form", JSON.stringify(this.tableData));
-            // 将value存储到key字段
-            // JSON.stringify()的作用是将 JavaScript 对象转换为 JSON 字符串
-            // 关掉对话框
-            this.dialog = false;
-            // 存储到表单中
-            this.addTicketInfoForm = {};
-            } else {
-            alert("表单不能为空");
-            }
-        } else {
-            // 接收修改的数据
-            this.tableData[this._index] = this.addTicketInfoForm;
-            localStorage.setItem("form", JSON.stringify(this.tableData));
-            this.dialog = false;
-            this.addTicketInfoForm = {};
-            this.getdata();
-        }
+            this.$refs[addTicketInfoForm].validate((valid) => {
+                if (valid) {
+                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId+"?amount="+this.addTicketInfoForm.ticPrice+"&count="+this.addTicketInfoForm.ticNum+"&currency="+this.addTicketInfoForm.ticCurrencyVal+"&listOrder=1&id=1&title="+this.addTicketInfoForm.ticName+"&type="+this.addTicketInfoForm.ticTypeVal+"&webId="+this.eventId+"").then(res => {
+                        if(res.data.rspCode == 1){
+                            alert("添加成功")
+                            this.tableData.push(addTicketInfoForm);
+                            console.log(this.tableData)
+                            this.dialog = false;
+
+                        }
+                        console.log(res)
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         },
         // 删除
         del(index) {
             if (confirm("确定删除吗?")) {
                 this.tableData.splice(index, 1);
-                localStorage.setItem("form", JSON.stringify(this.tableData));
             }
         },
         // 修改
@@ -132,10 +168,12 @@ export default {
 };
 </script>
 <style lang="less">
-        /deep/ .el-table th.is-leaf{
-            color: #333;
-        }   
-        
+    /deep/ .el-table th.is-leaf{
+        color: #333;
+    }   
+    /deep/ .el-form-item{
+        margin-bottom: 15px;
+    }
     .tickets{
         width: 864px;
         margin: 0 auto;

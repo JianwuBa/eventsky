@@ -16,18 +16,19 @@
                         <el-form >
                             <el-form-item >
                                 <h4 class="tit">活动详情</h4>
-                                      {{ msg }}
+                                        <!-- {{ msg }} -->
                                         <tinymce-editor ref="editor"
                                         v-model="msg"
                                         :disabled="disabled"
                                         :base-url="baseUrl"
                                         :language="language"
                                         :skin="skin"
+                                        
                                         @onClick="onClick">
                                         </tinymce-editor>
-                                        <button @click="clear">清空内容</button>
+                                        <!-- <button @click="clear">清空内容</button>
                                         <button @click="disabled = true">禁用</button>
-                                        <button @click="disabled = false">启用</button>
+                                        <button @click="disabled = false">启用</button> -->
                             </el-form-item>
                             <el-form-item >
                                 <h4 class="tit">上传活动横幅 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：1200x420px</span></h4>
@@ -66,28 +67,28 @@
                                             <el-button >上传海报</el-button>
                                         </el-upload>
                                     </div>
-                                        <div class="video">
+                                    <div class="video">
                                             <h4 class="tit">添加活动视频</h4>
-                                            <el-select placeholder="选择活动类别" v-model="value">
-                                                <el-option label="优酷" value="1"> </el-option>
-                                                <el-option label="腾讯" value="2"> </el-option>
-                                                <el-option label="爱奇艺" value="3"> </el-option>
-                                                <el-option label="芒果" value="4">  </el-option>
-                                                <el-option label="YouTube" value="5">  </el-option>
-                                                <el-option label="其他" value="6">  </el-option>
+                                             <el-select v-model="videoResourcesVal"  placeholder="选择视频来源">
+                                                <el-option  v-for="item in videoResources"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
                                             </el-select>
-                                       <el-input
-                                            type="textarea"
-                                            placeholder="请输入内容"
-                                            v-model="videoLink">
-                                        </el-input>
+                                            <el-input
+                                                type="textarea"
+                                                placeholder="视频链接代码：请使用视频网站所提供的通用代码"
+                                                v-model="videoLink">
+                                            </el-input>
                                     </div>
                                 </div>
                                 
                             </el-form-item>
                             <el-form-item class="save-event-info">
                                 <div class="save-event-btn">
-                                    <el-button type="primary" >立即创建</el-button>
+                                    <el-button type="primary" @click="savePromoteInfo()" v-if="detailBtnType">立即创建</el-button>
+                                    <el-button type="primary" @click="savePromoteInfoChange()" v-if="!detailBtnType">保存</el-button>
                                 </div>
                             </el-form-item>
 
@@ -101,9 +102,10 @@
 </template>
 
 <script>
-    import {Head} from "@/event/components/Head"
-    import {Aside} from "@/event/components/Aside"
+    import Head from "@/event/components/Head"
+    import Aside from "@/event/components/Aside"
     import TinymceEditor from "./components/tinymce-editor"
+    // 编辑器顶部导航icon
     import 'tinymce/icons/default/icons.min.js'
     export default {
         components:{
@@ -113,9 +115,12 @@
         },
         data(){
             return {
+                detailBtnType:true,
+                requestUrl:'/event-service',
+                eventId:'',
                 value:'',
                 //编辑器
-                msg: 'Welcome to Use Tinymce Editor-liubing.me',
+                msg: '',
                 disabled: false,
                 baseUrl: process.env.NODE_ENV === 'production' ? '/vue-use-tinymce' : '',
                 language: 'zh_CN',
@@ -130,6 +135,32 @@
                 defaultBan:true,
                 defaultPost:true,
                 videoLink:'',
+                //視頻資源
+                videoResourcesVal:'',
+                videoResources:[
+                    {
+                        value: 1,
+                        label: '优酷'
+                    },
+                    {
+                        value: 2,
+                        label: '腾讯'
+                    },
+                    {
+                        value: 3,
+                        label: '爱奇艺'
+                    },
+                    {
+                        value: 4,
+                        label: '芒果'
+                    },{
+                        value: 5,
+                        label: 'YouTube'
+                    },{
+                        value: 6,
+                        label: '其它'
+                    },
+                ]
             }
         },
         methods:{
@@ -170,15 +201,52 @@
                 alert("上传失败")
             },
             // 鼠标单击的事件
-    onClick (e, editor) {
-      console.log('Element clicked')
-      console.log(e)
-      console.log(editor)
-    },
-    // 清空内容
-    clear () {
-      this.$refs.editor.clear()
-    }
+            onClick (e, editor) {
+            console.log('Element clicked')
+            console.log(e)
+            console.log(editor)
+            },
+            // 清空内容
+            // clear () {
+            //   this.$refs.editor.clear()
+            // }
+            //提交活动详细信息
+            savePromoteInfo(){
+                //var ban = this.bannerUrl
+                this.$http.post(this.requestUrl+"/event_set/detail/"+this.eventId+"?bannelUrl="+this.bannerUrl+"&detail="+this.msg+"&posterUrl="+this.postUrl+"&videoCode="+this.videoLink+"&videoSource="+this.videoResourcesVal+"&webId="+this.eventId+"").then(res => {
+                    console.log(res)
+                    if(res.data.rspCode == 1){
+                        
+                        this.getEventDetail()
+                    }
+                })
+            },
+            //活动详细信息回显
+            getEventDetail(){
+                this.$http.get(this.requestUrl+"/event_set/detail/"+this.eventId+"").then(res =>{
+                    if(res.data.rspCode == 1){
+                        this.detailBtnType = false;
+                        let data = res.data.data
+                        console.log(data)
+                        this.defaultBan = false
+                        this.bannerUrl = data.bannelUrl
+                        this.defaultPost = false
+                        this.postUrl = data.posterUrl
+                        this.videoResourcesVal = Number(data.videoSource)     
+                        this.videoLink = data.videoCode
+                        this.msg = data.detail
+                    }
+                })
+            },
+            // 保存活动详细信息
+            savePromoteInfoChange(){
+                this.savePromoteInfo()
+            }
+        },
+        created(){
+            let webId = this.$route.params.pathMatch
+            this.eventId = webId
+            this.getEventDetail()
         }
     }
 </script>
@@ -191,7 +259,7 @@
          .container{
             position: relative;
             .promote{
-                width: 713px;
+                width: 855px;
                 margin: 20px auto 0; 
                 padding-bottom: 140px;
                 .tit{

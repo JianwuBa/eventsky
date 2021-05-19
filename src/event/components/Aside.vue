@@ -5,22 +5,30 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <p class="aside-tit">活动设置</p>
-            <el-menu  default-active="1">
-                
-                <el-menu-item index="1">
+            <el-menu  :default-active="activeIndex" >
+                <!-- <el-menu-item index="1">
                     <i class="el-icon-menu"></i>
-                    <span slot="title">公司设置</span>
+                    <span slot="title">数据分析</span>
+                    <i class="el-icon-caret-right active-arrow"></i>
+                </el-menu-item> -->
+                <el-menu-item index="2"  @click="chanteRouter('/live','2')">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">直播设置</span>
                     <i class="el-icon-caret-right active-arrow"></i>
                 </el-menu-item>
-                
-               <el-menu-item index="2">
+                <el-menu-item index="3" @click="chanteRouter('/event','3')">
                     <i class="el-icon-menu"></i>
-                    <span slot="title">活动列表</span>
+                    <span slot="title">基本信息</span>
                     <i class="el-icon-caret-right active-arrow"></i>
                 </el-menu-item>
-                <el-menu-item index="3">
+                <el-menu-item index="4" @click="chanteRouter('/event/detail/'+webId,'4')">
                     <i class="el-icon-menu"></i>
                     <span slot="title">宣传页面</span>
+                    <i class="el-icon-caret-right active-arrow"></i>
+                </el-menu-item>
+                 <el-menu-item index="5"  @click="chanteRouter('/stepevent/price/'+webId,'5')">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">报名及票务</span>
                     <i class="el-icon-caret-right active-arrow"></i>
                 </el-menu-item>
             </el-menu>
@@ -30,7 +38,19 @@
 
 <script>
 export default {
-
+    props:['webId'],
+    data(){
+        return{
+            activeIndex:'1'
+        }
+    },
+    methods:{
+        chanteRouter(path,index){
+            console.log(index)
+            this.activeIndex=index
+            this.$router.push(path)
+        }
+    }
 }
 </script>
 

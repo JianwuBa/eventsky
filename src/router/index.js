@@ -40,15 +40,27 @@ const router = new VueRouter({
         },
         {
             path:"/event",
-            component:()=> import("@/event/create")
+            component:()=> import("@/event/create"),
         },
         {
-            path:"/promote",
-            component:()=> import("@/promote/index")
+            path:"/event/detail",
+            component:()=> import("@/promote/index"),
+            children:[
+                {
+                    path:"/event/detail/*",
+                    component:()=> import("@/promote/index"),
+                }
+            ]
         },
         {
-            path:"/ticketing",
-            component:()=> import("@/event/ticketing")
+            path:"/stepevent/price",
+            component:()=> import("@/event/ticketing"),
+             children:[
+                {
+                    path:"/stepevent/price/*",
+                    component:()=> import("@/event/ticketing"),
+                }
+            ]
         },
         {
             path:"/live",

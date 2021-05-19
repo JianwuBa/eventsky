@@ -2,7 +2,7 @@
   <div class="tinymce-editor">
     <editor v-model="myValue"
       :init="init"
-      :disabled="disabled"
+      :disabled="disabled" 
       @onClick="onClick">
     </editor>
   </div>
@@ -51,21 +51,44 @@ export default {
       init: {
         language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
         language: 'zh_CN',
+        //编辑器主题颜色
         skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
         content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
-        // skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide-dark`, // 暗色系
-        // content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
-        height: 300,
+        //skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide-dark`, // 暗色系
+        //content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
+        height: 420,
         plugins: this.plugins,
         toolbar: this.toolbar,
         branding: false,
         menubar: false,
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
-        images_upload_handler: (blobInfo, success, failure) => {
-          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-          console.log(failure)
-          success(img)
+        images_upload_handler: function (blobInfo, succFun, failFun) {
+          var xhr, formData;
+          var file = blobInfo.blob();//转化为易于理解的file对象
+          xhr = new XMLHttpRequest();
+          xhr.withCredentials = false;
+          xhr.open('POST', '/file-service/upload');
+          xhr.onload = function() {
+              var json;
+              console.log(xhr)
+              if (xhr.status != 200) {
+                  failFun('HTTP Error: ' + xhr.status);
+                  return;
+              }
+              json = JSON.parse(xhr.responseText);
+              console.log(json)
+              if (!json || typeof json.filePath != 'string') {
+                  failFun('Invalid JSON: ' + xhr.responseText);
+                  console.log(JSON.parse(xhr.responseText).filePath)
+                  return;
+              }
+              succFun(json.filePath);
+          };
+          formData = new FormData();
+          formData.append('eskFile', file, file.name );//此处与源文档不一样
+          xhr.send(formData);
+          
         }
       },
       myValue: this.value

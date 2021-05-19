@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-container>
-        <Aside></Aside>
+        <Aside :webId="eventRuleForm.eventWebId"></Aside>
         <el-container class="aside">
             
             <el-header class="event-create-head">
