@@ -6,96 +6,131 @@
                 <div class="register-info">
                     <div class="info">
                         <el-form-item label="" prop="registerRame">
-                            <el-input v-model="registerForm.registerRame" placeholder="姓名"></el-input>
+                            <el-input  placeholder="姓名" disabled></el-input>
                         </el-form-item>
                         <el-form-item label="" prop="tel">
-                            <el-input v-model="registerForm.tel" placeholder="手机号"></el-input>
+                            <el-input placeholder="手机号" disabled>  </el-input>
                         </el-form-item>
                         <el-form-item label="" prop="email">
-                            <el-input v-model="registerForm.email" placeholder="邮箱"></el-input>
+                            <el-input  placeholder="邮箱" disabled></el-input>
                         </el-form-item>
                         <el-form-item label="" prop="compony">
-                            <el-input v-model="registerForm.compony" placeholder="公司"></el-input>
+                            <el-input placeholder="公司" disabled></el-input>
                         </el-form-item>
                         <el-form-item label="" prop="position">
-                            <el-input v-model="registerForm.position" placeholder="职位"></el-input>
+                            <el-input  placeholder="职位" disabled></el-input>
                         </el-form-item>
                     </div>
                     <div class="messages">
                         <el-form-item label="" prop="liveMessage">
-                            <el-input  type="textarea" placeholder="留言"  v-model="registerForm.liveMessage"> </el-input>
+                            <el-input  type="textarea" placeholder="留言" disabled> </el-input>
                         </el-form-item>
                     </div>
-                    
                 </div>
                 <h4 class="tit">报名者需填写社交账号*</h4>
                 <el-form-item label="" class="accounts-type">
-                    <el-checkbox-group v-model="registerForm.accounts">
-                        <el-checkbox label="微信" checked name="type"></el-checkbox>
-                        <el-checkbox label="领英" name="type"></el-checkbox>
-                        <el-checkbox label="钉钉" name="type"></el-checkbox>
-                        <el-checkbox label="知乎" name="type"></el-checkbox>
-                    </el-checkbox-group>
+
+                 
+                <div style="margin: 15px 0;"></div>
+                <el-checkbox-group v-model="checkedQuestion" @change="handleCheckedQuestionChange">
+                    <el-checkbox v-for="item in registerForm.accounts" :label="item.value" :key="item.value">{{item.label}}</el-checkbox>
+                </el-checkbox-group>
+
+
                 </el-form-item>
                 <el-form-item class="registers">
                     <div class="save-event-btn">
-                    <el-button type="primary" @click="registerFormInfo('registerForm')">保存</el-button>
+                    <el-button type="primary" @click="registerFormInfo()">保存</el-button>
                     </div>
                 </el-form-item>
             </el-form>
-            
-            
-        
     </div>
 </template>
-
 <script>
     export default {
         data(){
             return{
+                checkedQuestion: [],
+                isIndeterminate: true,    
+                eventId:'',
+                requestUrl:'/event-service',
+                registerFormVal:'',
                 registerForm:{
-                    registerRame:'',
-                    tel:"",
-                    email:'',
-                    compony:'',
-                    position:'',
-                    liveMessage:'',
-                    accounts:[]
+                    accounts:[
+                        {
+                            value:7,
+                            label:"微信"
+                        },
+                        {
+                            value:8,
+                            label:"领英"
+                        },
+                        {
+                            value:9,
+                            label:"丁丁"
+                        },
+                        {
+                            value:10,
+                            label:"知乎"
+                        },
+                    ]
                 },
                 registerRules:{
-                    registerRame: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' },
-                    ],
-                    tel: [
-                        { required: true, message: '请输入手机号', trigger: 'blur' },
-                    ],
-                    email: [
-                        { required: true, message: '请输入邮箱', trigger: 'blur' },
-                    ],
-                    compony: [
-                        { required: true, message: '请输入公司', trigger: 'blur' },
-                    ],
-                    position: [
-                        { required: true, message: '请输入职位', trigger: 'blur' },
-                    ],
-                    liveMessage: [
-                        { required: true, message: '请输入留言', trigger: 'blur' },
-                    ]
+                    
                 }
             }
         },
         methods:{
-            registerFormInfo(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+            handleCheckedQuestionChange(value) {
+                console.log(value)
+                let checkedCount = value.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.registerForm.accounts.length;
             },
-        }
+            //门票问题form数据
+            questionData(){
+                let obj = {
+                    webId:this.eventId,
+                    socialType:this.checkedQuestion,
+                }
+                return obj
+            },
+            registerFormInfo() {
+                const formData = new FormData();
+                Object.keys(this.questionData()).forEach((key) => {
+                    formData.append(key, this.questionData()[key]);
+                });
+                this.$http.post(this.requestUrl+"/question/social/"+this.eventId,formData).then(res =>{
+                    if(res.data.rspCode == 1){
+                        alert("保存成功")
+                    }
+                })
+            },
+            getRegisterFormInfo(){
+                this.$http.get(this.requestUrl+"/question/list/"+this.eventId,{params:{webId:this.eventId}}).then(res =>{
+                    res.data.data.filter(item => {
+                        if(item.type == 'SOCIAL_WECHAT'){
+                            this.checkedQuestion.push(7)
+                        }
+                        if(item.type == 'SOCIAL_LINKEDIN'){
+                            this.checkedQuestion.push(8)
+                        }
+                        if(item.type == 'SOCIAL_DINGDING'){
+                            this.checkedQuestion.push(9)
+                        }
+                        if(item.type == 'SOCIAL_ZHIHU'){
+                            this.checkedQuestion.push(10)
+                        }
+                    })
+                    //console.log(this.checkedQuestion)
+                })
+                
+            },
+        },
+        created() {
+            let webId = this.$route.params.pathMatch
+            this.eventId = webId
+            this.getRegisterFormInfo()
+        },
     }
 </script>
 

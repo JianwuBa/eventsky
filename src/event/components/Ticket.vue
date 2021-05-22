@@ -1,6 +1,6 @@
 <template>
     <div class="tickets">
-        <h4 class="tit">创建门票 <span @click="add=true;dialog = true">+添加新票种</span></h4>
+        <h4 class="tit">创建门票 <span @click="add=true;dialog = true;createTicBtn=true">+添加新票种</span></h4>
         <el-form :model="addTicketInfoForm" :rules="ticketRules" ref="addTicketInfoForm" >
             <!-- 弹出框 -->
                 <el-dialog
@@ -38,35 +38,96 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="ID" prop="ticID" v-if="showID">
+                    <el-input v-model="addTicketInfoForm.ticID" placeholder=""></el-input>
+                </el-form-item>
                 <div class="dialog-footer" slot="footer">
                     <el-button type="primary" @click="dialog = false">取 消</el-button>
-                    <el-button type="success" @click="saveInfo('addTicketInfoForm')">保存</el-button>
+                    <el-button type="success" v-if="createTicBtn" @click="saveInfo('addTicketInfoForm')">保存</el-button>
+                    <el-button type="success" v-if="!createTicBtn" @click="saveTicChange('addTicketInfoForm')">保存</el-button>
                 </div>
             </el-dialog>
         </el-form>
         <!-- 表格 -->
-        <el-table  :data="tableData"  :header-cell-style="{ 'background-color': '#D2D6DE','font-size':'14px','color':'#333','line-height':'16px'}">
-            <el-table-column prop="ticName" label="名称" width="220"></el-table-column>
-            <el-table-column prop="ticType" label="种类" width="100"></el-table-column>
-            <el-table-column prop="ticNum" label="数量" width="100"></el-table-column>
-            <el-table-column prop="ticPrice" label="价格" width="100"></el-table-column>
-            <el-table-column prop="ticCurrency" label="币种"></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope" >
-                    <span class="edut-btn" @click="edit(scope.$index,scope.row)"  >编辑</span>
-                    <span class="edut-btn">｜</span>
-                    <span class="edut-btn" @click="del(scope.$index)">删除</span>
+        <el-table  :data="ticArray"  :header-cell-style="{ 'background-color': '#D2D6DE','font-size':'14px','color':'#333','line-height':'16px'}">
+            <el-table-column prop="title" label="名称"> </el-table-column>
+            <el-table-column prop="type" label="种类">
+                <template slot-scope="scope">
+                {{scope.row[scope.column.property] | filterType}}
                 </template>
             </el-table-column>
+            <el-table-column prop="count" label="数量"> </el-table-column>
+            <el-table-column prop="amount" label="价格"> </el-table-column>
+            <el-table-column prop="currency" label="币种"> </el-table-column>
+            <el-table-column prop="id" label="ID" v-if="showID"> </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope" >
+                    <span class="edut-btn" @click="editTic(scope.row,scope.row.id)">编辑</span>
+                    <span class="edut-btn">｜</span>
+                    <span class="edut-btn" @click="delTic(scope.row.id)">删除</span>
+                </template>
+            </el-table-column> 
         </el-table>
+        <el-dialog
+            title=""
+            :visible.sync="delTICdialogVisible"
+            width="30%"
+            :before-close="handleClose">
+            <span>确定删除该票种吗？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="delTICdialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="delTICdialog">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+    // let ticForm = {
+    //     //数据模子
+    //     ticName:null,
+    //     ticType:null,
+    //     ticNum:null,
+    //     ticPrice:null,
+    //     ticCurrency:null
+    // }
 export default {
     name: "index",
+    
     data() {
         return {
+            createTicBtn:true,
+            delTICdialogVisible:false,
+            //门票ID
+            showID:false,
+            //门票列表
+            ticArray:[],
+            ticHead:[
+                {
+                    label: '名称',
+                    key: 'title'
+                },
+                 {
+                    label: '种类',
+                    key: 'type '
+                },
+                 {
+                    label: '数量',
+                    key: 'count'
+                },
+                 {
+                    label: '价格',
+                    key: 'amount'
+                },
+                 {
+                    label: '币种',
+                    key: 'currency'
+                },{
+                    label: 'id',
+                    key: 'id'
+                },
+            ],
+            //ticFormData:JSON.parse(JSON.stringify(ticForm)),
             eventId:'',
             requestUrl:'/event-service',
             addTicketInfoForm:{
@@ -94,7 +155,8 @@ export default {
                         value: '人民币',
                         label: '人民币'
                     },
-                ]
+                ],
+                ticID:'',
             },
             ticketRules:{
                 ticName: [
@@ -127,31 +189,53 @@ export default {
     created() {
         let webId = this.$route.params.pathMatch
         this.eventId = webId
+        this.getTicForm()
+    },
+    filters:{
+        filterType(val){
+            return val = val == 1 ? "免费":"收费"
+        }
     },
     methods: {
-       
-        // 保存数据
+        //获取门票列表
+        getTicForm(){
+            this.$http.get(this.requestUrl+"/event_set/price_list/"+this.eventId).then(res =>{
+               
+                this.ticArray = res.data.data
+                //console.log(this.ticArray)
+            })
+        },
+        //门票form数据
+        delTicFormData(){
+            let obj = {
+                amount:this.addTicketInfoForm.ticPrice,
+                count:this.addTicketInfoForm.ticNum,
+                currency:this.addTicketInfoForm.ticCurrencyVal,
+                listOrder:1,
+                title:this.addTicketInfoForm.ticName,
+                type:this.addTicketInfoForm.ticTypeVal,
+                webId:this.eventId,
+                id:this.addTicketInfoForm.ticID
+            }
+            return obj
+        },
+        // 保存门票
         saveInfo(addTicketInfoForm) {
             this.$refs[addTicketInfoForm].validate((valid) => {
                 if (valid) {
-                    console.log(this.addTicketInfoForm.ticCurrency)
-                    console.log(this.addTicketInfoForm.ticCurrencyVal)
-                    this.tableData.push({
-                        ticName:this.addTicketInfoForm.ticName,
-                        ticType:this.addTicketInfoForm.ticTypeVal,
-                        ticNum:this.addTicketInfoForm.ticNum,
-                        ticPrice:this.addTicketInfoForm.ticPrice,
-                        ticCurrency:this.addTicketInfoForm.ticCurrencyVal,
-                    })
-                    this.addTicketInfoForm = {};
+                    const formData = new FormData();
+                    Object.keys(this.delTicFormData()).forEach((key) => {
+                        formData.append(key, this.delTicFormData()[key]);
+                    });
                     this.dialog = false;
-                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId+"?amount="+this.addTicketInfoForm.ticPrice+"&count="+this.addTicketInfoForm.ticNum+"&currency="+this.addTicketInfoForm.ticCurrencyVal+"&listOrder=1&id=1&title="+this.addTicketInfoForm.ticName+"&type="+this.addTicketInfoForm.ticTypeVal+"&webId="+this.eventId+"").then(res => {
+                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                        if(res.data.rspCode == 400007){
+                            this.$router.push('/login')
+                        }
                         if(res.data.rspCode == 1){
-                            alert("添加成功")
-                            this.tableData.push(addTicketInfoForm);
-                            console.log(this.tableData)
                             this.dialog = false;
-
+                            location.reload();
+                            this.addTicketInfoForm = {};
                         }
                         console.log(res)
                     })
@@ -161,19 +245,58 @@ export default {
                 }
             });
         },
-        // 删除
-        del(index) {
-            if (confirm("确定删除吗?")) {
-                this.tableData.splice(index, 1);
-            }
-        },
         // 修改
-        edit(id, row) {
+        saveTicChange(addTicketInfoForm){
+            this.$refs[addTicketInfoForm].validate((valid) => {
+                if (valid) {
+                    const formData = new FormData();
+                    Object.keys(this.delTicFormData()).forEach((key) => {
+                        formData.append(key, this.delTicFormData()[key]);
+                    });
+                    this.dialog = false;
+                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                        if(res.data.rspCode == 400007){
+                            this.$router.push('/login')
+                        }
+                        if(res.data.rspCode == 1){
+                            this.dialog = false;
+                            location.reload();
+                        }
+                        console.log(res)
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        editTic(row,id) {
+            this.createTicBtn=false;
             this.dialog = true;
-            this.add = false;
-            this._index = id;
-            // Object.assign()拷贝的是属性值
-            this.addTicketInfoForm = Object.assign({}, row);
+            this.addTicketInfoForm.ticID = id;
+            console.log(this.ticID)
+            this.addTicketInfoForm.ticName = row.title
+            this.addTicketInfoForm.ticTypeVal = row.type
+            this.addTicketInfoForm.ticNum = row.count
+            this.addTicketInfoForm.ticPrice = row.amount
+            this.addTicketInfoForm.ticCurrencyVal = row.currency
+        },
+        //删除票种
+        delTic(id){
+            this.$http.delete(this.requestUrl + "/event_set/price/"+this.eventId+"?priceId="+id).then(res =>{
+                console.log(res)
+                if(res.data.rspCode == 1){
+                    this.delTICdialogVisible = true
+                    
+                }
+            })
+        },
+        handleClose(){
+            this.delTICdialogVisible = false;
+        },
+        delTICdialog(){
+            this.delTICdialogVisible = true;
+            location.reload();
         }
     }
 };
