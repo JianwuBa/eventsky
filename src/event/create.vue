@@ -239,6 +239,7 @@
                     console.log(res)
                     if(res.data.rspCode == 1){
                         let data = res.data.data
+                        console.log(data)
                         this.eventRuleForm.name = data.title
                         this.eventRuleForm.introduce = data.digest
                         this.eventRuleForm.timeZoneVal = data.timezone
@@ -258,7 +259,7 @@
                     if (valid) {
                         let start = this.dateFormat(this.eventRuleForm.date[0])
                         let end = this.dateFormat(this.eventRuleForm.date[1])
-                        this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"&webId="+this.eventRuleForm.eventWebId+"").then(res => {
+                        this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"&webId="+this.eventRuleForm.eventWebId+"&location="+this.eventRuleForm.adress+"").then(res => {
                             console.log(res)
                             if(res.data.rspCode == 1){
                                alert("修改成功")
@@ -281,7 +282,7 @@
 </script>
 <style lang="less" scoped>
     .el-main{
-        padding: 60px 0 0 190px;
+        padding: 0 0 120px 190px;
         height: 100%;
         .container{
             position: relative;

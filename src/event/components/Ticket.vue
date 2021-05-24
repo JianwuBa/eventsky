@@ -83,14 +83,7 @@
 </template>
 
 <script>
-    // let ticForm = {
-    //     //数据模子
-    //     ticName:null,
-    //     ticType:null,
-    //     ticNum:null,
-    //     ticPrice:null,
-    //     ticCurrency:null
-    // }
+
 export default {
     name: "index",
     

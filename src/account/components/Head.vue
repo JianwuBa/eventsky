@@ -9,7 +9,7 @@
             </el-upload>
       </div>
       <div class="center">
-        <el-button type="success" class="create-event">创建新活动</el-button>
+        <el-button type="success" class="create-event" @click="createEvent">创建新活动</el-button>
         <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
             
             <el-button slot="append" icon="el-icon-search"></el-button>
@@ -30,6 +30,11 @@ export default {
         return {
            
             input3: '',
+        }
+    },
+    methods: {
+        createEvent(){
+            this.$router.push('/event')
         }
     }
 }

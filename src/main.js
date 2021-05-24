@@ -16,7 +16,7 @@ Vue.use(elementUi)
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
-  i18n,
-  router
+    render: h => h(App),
+    i18n,
+    router
 }).$mount('#app')
