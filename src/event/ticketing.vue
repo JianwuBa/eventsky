@@ -31,8 +31,8 @@
 </template>
 
 <script>
-    import Head from "./components/Head"
-    import Aside from "./components/Aside"
+    import Head from "@/components/event/Head"
+    import Aside from "@/components/event/Aside"
     import Ticket from "./components/Ticket"
     import Register from "./components/Register"
     export default {

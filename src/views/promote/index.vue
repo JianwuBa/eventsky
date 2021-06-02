@@ -33,7 +33,7 @@
                             <el-form-item >
                                 <h4 class="tit">上传活动横幅 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：1200x420px</span></h4>
                                 <div class="banner">
-                                    <img src="../assets/image/default-img.png" class="default" v-if="defaultBan" alt="">
+                                    <img src="@/assets/image/default-img.png" class="default" v-if="defaultBan" alt="">
                                     <img :src="bannerUrl" class="" v-if="!defaultBan" alt="">
                                 </div>
                                 <el-upload
@@ -53,7 +53,7 @@
                                     <div class="post">
                                         <h4 class="tit">上传活动海报 <span style="font-size:12px;color:#999;font-weight:normal;">最佳尺寸：750x1334px</span></h4>
                                         <div class="banner">
-                                            <img src="../assets/image/default-img.png" class="default" v-if="defaultPost" alt="">
+                                            <img src="@/assets/image/default-img.png" class="default" v-if="defaultPost" alt="">
                                             <img :src="postUrl" class="" v-if="!defaultPost" alt="">
                                         </div>
                                         <el-upload
@@ -102,8 +102,8 @@
 </template>
 
 <script>
-    import Head from "@/event/components/Head"
-    import Aside from "@/event/components/Aside"
+    import Head from "@/components/event/Head"
+    import Aside from "@/components/event/Aside"
     import TinymceEditor from "./components/tinymce-editor"
     // 编辑器顶部导航icon
     import 'tinymce/icons/default/icons.min.js'

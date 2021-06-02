@@ -22,11 +22,7 @@
                                     <div class="bottom">
                                         <div class="left">
                                             <p class="text"> 给本次活动的主讲嘉宾使用，点击后即可加入开播。</p>
-                                            <p class="pass">
-                                                <span>直播密码：</span>
-                                                <el-input  placeholder="请输入内容"></el-input>
-                                                
-                                            </p>
+                                            
                                             <p class="link"> <a href="">https://www.1212121313eventSky.cn</a> </p>
                                         </div>
                                         <div class="right">
@@ -46,14 +42,7 @@
                                         <div class="left">
                                             <p class="text"> 活动参加者报名后，系统会把此参会链接通过邮件、短信、微信，发送给参加者。</p>
                                             <div class="pass">
-                                                <span class="signin-pass">签到密码：</span>
-                                                <div>
-                                                    <el-radio v-model="radio" label="1">自动生成  <span>为每个参会者自动生成不同的</span></el-radio>
-                                                    <el-radio v-model="radio" label="3">
-                                                        <span>统一设置</span>
-                                                        <el-input placeholder="请输入内容"></el-input>
-                                                    </el-radio>
-                                                </div>
+                                               
                                             </div>
                                             <p class="link"> <a href="">https://www.1212121313eventSky.cn</a> </p>
                                         </div>
@@ -63,24 +52,30 @@
                                         </div>
                                     </div>
                                     <div class="view-num">
-                                        观看：234
+                                        观看：{{liveViws}}
                                     </div>
                                 </el-card>
                             </el-col>
                             <el-col :span="24">
                                 <el-card shadow="never" class="register-card">
+
                                     <div class="top">
-                                            <img src="@/assets/image/tic.png" alt="">
-                                            <p>报名链接</p>
+                                        <img src="@/assets/image/tic.png" alt="">
+                                        <p>报名链接</p>
                                     </div>
-                                    <div class="left">
-                                        <p class="text">本次活动报名页面的链接，可把此链接和二维码发送或分享出去。点击即可报名参加此活动。</p>
-                                            <el-input placeholder="请输入内容">
-                                                <template slot="prepend">Http://</template>
-                                            </el-input>
+                                    <div class="bottom">
+                                        <div class="left">
+                                            <p class="text">本次活动报名页面的链接，可把此链接和二维码发送或分享出去。点击即可报名参加此活动。</p>
+                                                <el-input placeholder="">
+                                                    <template slot="prepend">https://eventsky.cn/</template>
+                                                </el-input>
+                                        </div>
+                                        <div class="right">
+                                            <img :src="codeUrl" alt="">
+                                        </div>
                                     </div>
-                                    <div class="right">
-                                        <img src="" alt="">
+                                    <div class="view-num">
+                                        观看：{{liveViws}}
                                     </div>
                                 </el-card>
                             </el-col>
@@ -89,26 +84,77 @@
                 </el-main>
             </el-container>
         </el-container>
+        <div class="save-event-info">
+            <div class="save-event-btn">
+                <el-button type="primary" >保存</el-button>
+            </div>
+        </div>
     </div>    
 </template>
 
 <script>
-import Head from '@/event/components/Head'
-import Aside from '@/event/components/Aside'
+import Head from '@/components/event/Head'
+import Aside from '@/components/event/Aside'
+import {getLiveInfo} from '@/api/liveService.js'
     export default {
         data () {
             return {
-                radio: '1'
+                radio: '1',
+                eventId:'',
+                liveViws:'',
+                codeUrl:'',
+                banUrl:''
             };
         },
         components:{
             Head,
             Aside
+        },
+        methods:{
+           liveInfo(){
+               getLiveInfo(this.eventId).then(res => {
+                    console.log(res)
+                    this.liveViws = res.data.data.eventVO.views
+                    this.banUrl = res.data.data.eventVO.bannelUrl
+                    this.codeUrl = res.data.data.eventVO.barcodeUrl
+               })
+           }
+        },
+        created(){
+            this.eventId = this.$route.params.pathMatch
+            this.liveInfo()
         }
     }
 </script>
 
 <style lang="less" scoped>
+.save-event-info{
+        width: 100%;
+        border-radius: 3px;
+        position: fixed;
+        padding-left: 190px;
+        left: 0;
+        bottom: 50px;
+        box-sizing: border-box;
+        .save-event-btn{
+            width:80%;
+            background: #FFFFFF;
+            box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.18);
+            border-radius: 3px;
+            margin: 0 auto;
+            text-align: right;
+            /deep/ .el-button{
+                background: #F5A623;
+                border-radius: 0px 3px 3px 0px;
+                line-height: 50px;
+                margin: 0;
+                padding: 0 70px;
+                color: #fff;
+                font-size: 16px;
+                border: none;
+            }
+        }
+    }
 .el-main{
     .top-tit{
         height: 80px;
@@ -129,14 +175,45 @@ import Aside from '@/event/components/Aside'
     .live-content{
         .register-card{
             margin-top: 20px;
+            position: relative;
+             .view-num{
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 13px;
+                background: #CDE5FF;
+                border-radius: 2px;color: #666666;font-size: 14px;
+                line-height: 24px;
+                padding: 0 10px;
+            }
+            .top{
+                margin-bottom: 0;
+            }
+            .bottom{
+                .right{
+                    width: 130px;
+                    height: 130px;
+                    margin: 0;
+                    padding: 2px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+            /deep/ .el-input__inner{
+                height: 30px;
+                line-height: 30px;
+            }
         }
         .live-card{
-            height: 187px;
+            height: 165px;
             position: relative;
             .view-num{
                 position: absolute;
-                right: 20px;
+                
                 top: 13px;
+                right: 20px;
                 background: #CDE5FF;
                 border-radius: 2px;color: #666666;font-size: 14px;
                 line-height: 24px;

@@ -1,5 +1,4 @@
 <template>
-      
   <div>
     <div class="header-banner">
         <Head></Head>
@@ -203,7 +202,7 @@
   </div>
 </template>
   <script>
-  import Head from '@/login/components//LoginHead'
+  import Head from '@/views/login/components/LoginHead'
   export default {
     data() {
       return {
@@ -221,7 +220,7 @@
 </script>
 <style lang="css" scoped>
     .headerBg{
-        background-image: url('../assets/header-bg.png');
+        background-image: url('../..//assets/header-bg.png');
     }
     header{
       width: 100%;
@@ -455,13 +454,13 @@
   .applySuccess-dialig .text1{
       font-size: 18px;
       text-align: center;
-      color: #33;
+      color: #333;
       font-weight: bold;
   }
   .applySuccess-dialig .text2{
       font-size: 14px;
       text-align: center;
-      color: #33;
+      color: #333;
   }
   .submit-applySuccess{
       line-height: 42px;

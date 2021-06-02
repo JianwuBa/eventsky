@@ -6,11 +6,11 @@
             </div>
             <p class="aside-tit">活动设置</p>
             <el-menu  :default-active="activeIndex" >
-                <!-- <el-menu-item index="1">
+                <el-menu-item index="1" @click="chanteRouter('/overview','1')">
                     <i class="el-icon-menu"></i>
                     <span slot="title">数据分析</span>
                     <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item> -->
+                </el-menu-item>
                 <el-menu-item index="2"  @click="chanteRouter('/live','2')">
                     <i class="el-icon-menu"></i>
                     <span slot="title">直播设置</span>

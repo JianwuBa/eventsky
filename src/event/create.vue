@@ -87,8 +87,8 @@
 </template>
 
 <script>
-    import Head from "./components/Head"
-    import Aside from "./components/Aside"
+    import Head from "@/components/event/Head"
+    import Aside from "@/components/event/Aside"
     export default {
         data() {
             return {

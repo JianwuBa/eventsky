@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import {postCodeLogin ,postEmailCode} from '@/api/userService.js'
     export default {
       data(){
         return{
@@ -48,7 +49,8 @@
       },
       methods:{
         registerCode(){
-          this.$http.post("/user-service/auth/send?target="+this.formName.email+"&type=EMAIL_LOGIN").then(res => {
+          // this.$http.post("/user-service/auth/send?target="+this.formName.email+"&type=EMAIL_LOGIN").then(res => {
+            postEmailCode(this.formName.email).then(res => {
             console.log(res)
             if(res.data.rspCode == 1){
               const TIME_COUNT = 60;
@@ -73,7 +75,8 @@
         authCodeLogin(formName){
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.$http.post("/user-service/account/login_c?email="+this.formName.email+"&type=1&typeCode="+this.formName.authCode+"").then(res=>{
+              // this.$http.post("/user-service/account/login_c?email="+this.formName.email+"&type=1&typeCode="+this.formName.authCode+"").then(res=>{
+                postCodeLogin(this.formName.email,this.formName.authCode).then(res => {
                 console.log(res)
                 if(res.data.rspCode == 1){
                   setTimeout(() => {

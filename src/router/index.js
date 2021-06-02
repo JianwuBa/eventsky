@@ -12,17 +12,17 @@ const router = new VueRouter({
     routes: [{
             path: '/',
             component: () =>
-                import ('@/Home')
+                import ('@/views/Home')
         },
         {
             path: "/register",
             component: () =>
-                import ("@/login/register")
+                import ("@/views/login/register")
         },
         {
             path: "/login",
             component: () =>
-                import ("@/login/login")
+                import ("@/views/login/login")
         },
         {
             path: "/info",
@@ -32,17 +32,17 @@ const router = new VueRouter({
         {
             path: "/forget-pass",
             component: () =>
-                import ("@/login/forgetPassword")
+                import ("@/views/login/forgetPassword")
         },
         {
             path: "/reset-pass",
             component: () =>
-                import ("@/login/resetPassword")
+                import ("@/views/login/resetPassword")
         },
         {
             path: "/compony",
             component: () =>
-                import ("@/companySetup/index")
+                import ("@/views/companySetup/index")
         },
         {
             path: "/event",
@@ -52,11 +52,11 @@ const router = new VueRouter({
         {
             path: "/event/detail",
             component: () =>
-                import ("@/promote/index"),
+                import ("@/views/promote/index"),
             children: [{
                 path: "/event/detail/*",
                 component: () =>
-                    import ("@/promote/index"),
+                    import ("@/views/promote/index"),
             }]
         },
         {
@@ -72,12 +72,27 @@ const router = new VueRouter({
         {
             path: "/live",
             component: () =>
-                import ("@/live/liveSet")
+                import ("@/views/live/liveSet"),
+            children: [{
+                path: "/live/*",
+                component: () =>
+                    import ("@/views/live/liveSet"),
+            }]
         },
         {
             path: "/event-list",
             component: () =>
                 import ("@/account/eventList/index")
+        },
+        {
+            path: "/order-list",
+            component: () =>
+                import ("@/views/orderList/index")
+        },
+        {
+            path: "/overview",
+            component: () =>
+                import ("@/views/statisticalInfo/index")
         }
     ]
 })

@@ -34,7 +34,7 @@
            <el-form-item label="职务" prop="position">
             <el-input v-model="ruleForm.position" placeholder="请输入职务" @input="change($event)"></el-input>
           </el-form-item>
-          <el-button type="primary" size="medium" @click="submitForm('ruleForm')">下一步</el-button>
+          <el-button type="primary" size="medium" @click="submitForm('ruleForm')" style="position: relative;z-index: 999;">下一步</el-button>
         </div> 
         
       </el-form>
@@ -66,6 +66,7 @@
 <script>
 import Head from "./components/LoginHead"
 import Footer from "./components/LoginFooter"
+import {postRegisterCode ,postRegisterAccount ,postRegisterAccountInfo} from '@/api/userService.js'
 export default {
   
   data() {
@@ -150,7 +151,8 @@ export default {
       this.$router.push({path:'/login'})
     },
     registerCode(){
-      this.$http.post("/user-service/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
+      // this.$http.post("/user-service/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
+        postRegisterCode(this.target).then(res => {
         console.log(res)
         if(res.data.rspCode == 400005){
           this.errorMessage = true
@@ -159,7 +161,8 @@ export default {
       })
     },
     registerInformation(){
-      this.$http.post("/user-service/auth/check?type=EMAIL_SIGNUP&target="+this.target+"&authCode="+this.authCode+"").then(res =>{
+      // this.$http.post("/user-service/auth/check?type=EMAIL_SIGNUP&target="+this.target+"&authCode="+this.authCode+"").then(res =>{
+        postRegisterAccount(this.target,this.authCode).then(res => {
         console.log(res)
         if(res.data.rspCode == 1){
           this.emailCodeState = false;
@@ -185,10 +188,23 @@ export default {
         }
       });
     },
+    registerInfos(){
+      let obj = {
+          authCode:this.authCode,
+          company:this.ruleForm.company,
+          email:this.target,
+          fullName:this.ruleForm.fullName,
+          passwd:this.passwordForm.pass,
+          phone:this.ruleForm.phone,
+          position:this.ruleForm.position
+      }
+      return obj
+    },
     submitPassword(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$http.post("/user-service/account/signup_c?authCode="+this.authCode+"&company="+this.ruleForm.company+"&email="+this.target+"&fullName="+this.ruleForm.fullName+"&passwd="+this.passwordForm.pass+"&phone="+this.ruleForm.phone+"&position="+this.ruleForm.position+"").then(res=>{
+          // this.$http.post("/user-service/account/signup_c?authCode="+this.authCode+"&company="+this.ruleForm.company+"&email="+this.target+"&fullName="+this.ruleForm.fullName+"&passwd="+this.passwordForm.pass+"&phone="+this.ruleForm.phone+"&position="+this.ruleForm.position+"").then(res=>{
+            postRegisterAccountInfo(this.registerInfos()).then(res => {
             console.log(res)
             if(res.data.rspCode == 1){
               setTimeout(() => {
