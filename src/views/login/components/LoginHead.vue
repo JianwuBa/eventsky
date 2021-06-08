@@ -6,6 +6,8 @@
             </div>
             <div class="head-nav">
                 <span >{{$t('INDEX_申请试用')}}</span>
+                <span @click="login">登陆</span>
+                <span @click="register">注册</span>
                 <span  @click="langZh">中文</span>
                 <span @click="langEn"> English</span>
             </div>
@@ -23,6 +25,12 @@ export default {
       langEn(){
         this.$i18n.locale = 'en'
         window.localStorage.setItem('lang',this.$i18n.locale)
+      },
+      login(){
+          this.$router.push("/login")
+      },
+      register(){
+          this.$router.push("/register")
       }
     }
 }

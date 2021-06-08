@@ -11,6 +11,9 @@ import axios from "axios";
 import router from './router/index'
 Vue.prototype.$http = axios;
 
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
+
 Vue.use(elementUi)
 
 Vue.config.productionTip = false

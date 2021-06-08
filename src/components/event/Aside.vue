@@ -5,32 +5,14 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <p class="aside-tit">活动设置</p>
-            <el-menu  :default-active="activeIndex" >
-                <el-menu-item index="1" @click="chanteRouter('/overview','1')">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">数据分析</span>
-                    <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item>
-                <el-menu-item index="2"  @click="chanteRouter('/live','2')">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">直播设置</span>
-                    <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item>
-                <el-menu-item index="3" @click="chanteRouter('/event','3')">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">基本信息</span>
-                    <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item>
-                <el-menu-item index="4" @click="chanteRouter('/event/detail/'+webId,'4')">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">宣传页面</span>
-                    <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item>
-                 <el-menu-item index="5"  @click="chanteRouter('/stepevent/price/'+webId,'5')">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">报名及票务</span>
-                    <i class="el-icon-caret-right active-arrow"></i>
-                </el-menu-item>
+            <el-menu  :default-active="path" router>
+                <template v-for="(item,index) in navList" >
+                    <el-menu-item :index="item.path" :key="index">
+                        <img :src="item.imgIcon" class="navIcon" alt="">
+                        <span >{{item.title}}</span>
+                        <i class="el-icon-caret-right active-arrow"></i>
+                    </el-menu-item>
+                </template>
             </el-menu>
         </el-aside>
     </div>
@@ -41,21 +23,55 @@ export default {
     props:['webId'],
     data(){
         return{
-            activeIndex:'1'
+            path:'',
+            navList:[
+                {
+                    "title":'数据分析',
+                    "path":"/overview",
+                    "imgIcon":require("@/assets/image/sjfx.png")
+                },
+                {
+
+                    "title":'直播设置',
+                    "path":"/live",
+                    "imgIcon":require("@/assets/image/sjfx.png")
+                },
+                {
+
+                    "title":'基本信息',
+                    "path":"/event/detail/"+this.webId,
+                    "imgIcon":require("@/assets/image/sjfx.png")
+                },
+                {
+
+                    "title":'报名及票务',
+                    "path":"/stepevent/price/"+this.webId,
+                    "imgIcon":require("@/assets/image/sjfx.png")
+                }
+            ]
         }
     },
     methods:{
-        chanteRouter(path,index){
-            console.log(index)
-            this.activeIndex=index
-            this.$router.push(path)
+        onRouteChanged(){
+            let that = this
+            that.path  = that.$route.path
         }
+    },
+    created () {
+        this.onRouteChanged()
+    },
+    watch: {
+        // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
+        '$route': 'onRouteChanged'
     }
 }
 </script>
 
 <style lang="less" scoped>
-    
+    .navIcon{
+        height: 18px;
+        margin-right: 5px;
+    }
     /deep/ .el-aside{
         height: 100%;
         position: fixed;

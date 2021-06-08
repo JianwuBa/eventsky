@@ -17,3 +17,4 @@ let resquest = "/event-service"
 export function getHeadInfo(id) {
     return http.get(`${resquest}/event/info/` + id)
 }
+//获取活动信息

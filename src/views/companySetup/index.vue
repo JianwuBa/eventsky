@@ -67,6 +67,7 @@
 <script>
 import Head from "@/account/components/Head"
 import Aside from "@/account/components/Aside"
+import {getComponyInfo,postCcompanyChange} from "@/api/userService"
 export default {
     components:{
         Head,
@@ -108,12 +109,22 @@ export default {
         this.getComponyInfo()
     },
     methods: {
-       
+        componyChangeInfo(){
+            let obj = {
+                barcodeUrl:this.componyForm.codeUrl,
+                companyIntro:this.componyForm.introduce,
+                companyName:this.componyForm.componyName,
+                domain:this.componyForm.link,
+                logoUrl:this.componyForm.logoUrl
+            }
+            return obj
+        },
         //公司信息提交
         submitComponyInfo(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.$http.post("/user-service/company/update_info?barcodeUrl="+this.componyForm.codeUrl+"&companyIntro="+this.componyForm.introduce+"&companyName="+this.componyForm.componyName+"&domain="+this.componyForm.link+"&logoUrl="+this.componyForm.logoUrl+"").then(res =>{
+                    postCcompanyChange(this.componyChangeInfo()).then(res => {
+                    // this.$http.post("/user-service/company/update_info?barcodeUrl="+this.componyForm.codeUrl+"&companyIntro="+this.componyForm.introduce+"&companyName="+this.componyForm.componyName+"&domain="+this.componyForm.link+"&logoUrl="+this.componyForm.logoUrl+"").then(res =>{
                         console.log(res)
                     })
                 } else {
@@ -123,7 +134,8 @@ export default {
             });
         },
         getComponyInfo(){
-            this.$http.get("/user-service/company/info").then(res => {
+            // this.$http.get("/user-service/company/info").then(res => {
+                getComponyInfo().then(res => {
                 console.log(res)
                 if(res.data.rspCode == 1){
                     this.componyForm.componyName =  res.data.data.companyName

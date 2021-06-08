@@ -57,3 +57,13 @@ export function postChangeEmail(code, email) {
 export function postChangePhone(code, phone) {
     return http.post(`${resquest}/account/update_phone?authCode=${code}&email=${phone}`)
 }
+
+//获取公司设置 信息
+export function getComponyInfo() {
+    return http.get(`${resquest}/company/info`)
+}
+
+//提交公司 修改信息
+export function postCcompanyChange(params) {
+    return http.post(`${resquest}/company/update_info`, qs.stringify(params))
+}

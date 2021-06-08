@@ -17,6 +17,7 @@
 
 <script>
 import {postPasLogin} from '@/api/userService.js'
+import Cookies from 'js-cookie'
 export default {
     
     data() {
@@ -47,8 +48,10 @@ export default {
               postPasLogin(this.account.name,this.account.pass).then(res => {
               console.log(res)
               if(res.data.rspCode == 1){
+                let token = res.data.data
+                Cookies.set('skyToken', token);
                 setTimeout(() => {
-                  this.$router.push({path:'/info'})
+                  this.$router.push({path:'/account/info'})
                 }, 100);
               }else if(res.data.rspCode == 0){
                 this.errorMessage = true

@@ -22,6 +22,7 @@
 
 <script>
 import {postCodeLogin ,postEmailCode} from '@/api/userService.js'
+import Cookies from 'js-cookie'
     export default {
       data(){
         return{
@@ -43,7 +44,8 @@ import {postCodeLogin ,postEmailCode} from '@/api/userService.js'
           },
            //验证码显示状态
           errorMessage:false,
-          errorMessageText:""
+          errorMessageText:"",
+          
         } 
         
       },
@@ -78,9 +80,13 @@ import {postCodeLogin ,postEmailCode} from '@/api/userService.js'
               // this.$http.post("/user-service/account/login_c?email="+this.formName.email+"&type=1&typeCode="+this.formName.authCode+"").then(res=>{
                 postCodeLogin(this.formName.email,this.formName.authCode).then(res => {
                 console.log(res)
+
                 if(res.data.rspCode == 1){
+                  let token = res.data.data
+                  Cookies.set('skyToken', token);
+                  
                   setTimeout(() => {
-                    this.$router.push({path:'/info'})
+                    this.$router.push({path:'account//info'})
                   }, 1000);
                 }else if(res.data.rspCode == 400006){
                   this.errorMessage = true,

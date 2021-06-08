@@ -18,7 +18,7 @@
       <div class="right">
           <div class="sign-out">
                 <img src="@/assets/image/signout.png" style="width:20px;" alt="">
-                <span>退出</span>
+                <span @click="loginOut">退出</span>
           </div>
       </div>
   </div>
@@ -35,6 +35,9 @@ export default {
     methods: {
         createEvent(){
             this.$router.push('/event')
+        },
+        loginOut(){
+             this.$router.push('/')
         }
     }
 }
@@ -104,6 +107,7 @@ export default {
             }
         }
         .sign-out{
+            cursor: pointer;
             img{
                 vertical-align: middle;
                 margin-right: 10px;
