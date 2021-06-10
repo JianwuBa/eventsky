@@ -20,7 +20,7 @@ service.interceptors.request.use(config => {
         }
         //注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
     const token = Cookies.get('skyToken'); //这里取token之前，你肯定需要先拿到token,存一下
-    console.log(token)
+    //console.log(token)
     if (token) {
 
         // config.params = { 'ESToken': token } //如果要求携带在参数中
@@ -34,7 +34,12 @@ service.interceptors.request.use(config => {
 // 3.响应拦截器
 service.interceptors.response.use(response => {
         //接收到响应数据并成功后的一些共有的处理，关闭loading等
-
+        // console.log(response, "sad iojaods oas")
+        // if (response && response.status == 200) {
+        //     if (response.data.rspCode == "400002") {
+        //         window.location.href = "http://192.168.1.216:8888/#/login/"
+        //     }
+        // }
         return response
     }, error => {
         /***** 接收到异常响应的处理开始 *****/

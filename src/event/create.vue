@@ -89,6 +89,7 @@
 <script>
     import Head from "@/components/event/Head"
     import Aside from "@/components/event/Aside"
+    import {getEventInfoShow,postSaveEventInfo,postCreateEventInfo} from "@/api/eventService.js"
     export default {
         data() {
             return {
@@ -210,14 +211,28 @@
                 let s = dt.getSeconds().toString().padStart(2, '0')
                 return yyyy + '-' + MM + '-' + dd + ' ' + h + ':' + m + ':' + s
             },
-
+            //创建活动 信息
+            createEventInfo(){
+                let obj = {
+                    beginDate: this.dateFormat(this.eventRuleForm.date[0]),
+                    endDate:this.dateFormat(this.eventRuleForm.date[1]),
+                    category:this.eventRuleForm.eventTypeVal,
+                    digest:this.eventRuleForm.introduce,
+                    locationType:this.eventRuleForm.eventForm,
+                    timezone:this.eventRuleForm.timeZoneVal,
+                    title:this.eventRuleForm.name,
+                    location:this.eventRuleForm.adress
+                }
+                return obj
+            },
             // 创建活动基本信息
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let start = this.dateFormat(this.eventRuleForm.date[0])
-                        let end = this.dateFormat(this.eventRuleForm.date[1])
-                        this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"").then(res => {
+                        // let start = this.dateFormat(this.eventRuleForm.date[0])
+                        // let end = this.dateFormat(this.eventRuleForm.date[1])
+                        // this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"").then(res => {
+                        postCreateEventInfo(this.createEventInfo()).then(res => {
                             console.log(res)
                             if(res.data.rspCode == 1){
                                 this.eventRuleForm.eventWebId = res.data.data.webId
@@ -235,8 +250,10 @@
             //活动基本信息回显
             getEventInfo(wenId){
                 console.log(wenId)
-                this.$http.get(this.requestUrl+"/event_set/basic/"+wenId+"").then(res => {
-                    console.log(res)
+
+                // this.$http.get(this.requestUrl+"/event_set/basic/"+wenId+"").then(res => {
+                    getEventInfoShow(wenId).then(res => {
+                    console.log(res,'回显信息')
                     if(res.data.rspCode == 1){
                         let data = res.data.data
                         console.log(data)
@@ -253,13 +270,29 @@
                     
                 })
             },
+            //修改 活动基本信息
+            eventInfo(){
+                let obj = {
+                    beginDate:this.dateFormat(this.eventRuleForm.date[0]),
+                    endDate:this.dateFormat(this.eventRuleForm.date[1]),
+                    category:this.eventRuleForm.eventTypeVal,
+                    digest:this.eventRuleForm.introduce,
+                    locationType:this.eventRuleForm.eventForm,
+                    timezone:this.eventRuleForm.timeZoneVal,
+                    title:this.eventRuleForm.name,
+                    webId:this.eventRuleForm.eventWebId,
+                    location:this.eventRuleForm.adress
+                }
+                return obj
+            },
             // 保存修改之后的活动基本信息
             saveEventInfo(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let start = this.dateFormat(this.eventRuleForm.date[0])
-                        let end = this.dateFormat(this.eventRuleForm.date[1])
-                        this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"&webId="+this.eventRuleForm.eventWebId+"&location="+this.eventRuleForm.adress+"").then(res => {
+                        // let start = this.dateFormat(this.eventRuleForm.date[0])
+                        // let end = this.dateFormat(this.eventRuleForm.date[1])
+                        postSaveEventInfo(this.eventInfo()).then(res => {
+                        // this.$http.post(this.requestUrl+"/event_set/basic?beginDate="+start+"&endDate="+end+"&category="+this.eventRuleForm.eventTypeVal+"&digest="+this.eventRuleForm.introduce+"&locationType="+this.eventRuleForm.eventForm+"&timezone="+this.eventRuleForm.timeZoneVal+"&title="+this.eventRuleForm.name+"&webId="+this.eventRuleForm.eventWebId+"&location="+this.eventRuleForm.adress+"").then(res => {
                             console.log(res)
                             if(res.data.rspCode == 1){
                                alert("修改成功")
@@ -274,6 +307,12 @@
         },
         created(){
             let webId = this.$route.query.webId
+            console.log(webId,'这是web id')
+            this.eventRuleForm.eventWebId = webId
+            console.log(this.eventRuleForm.eventWebId,'活动ID')
+            if(webId){
+                this.SaveBtnState = true
+            }
             this.getEventInfo(webId)
         }
        

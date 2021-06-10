@@ -47,6 +47,7 @@
     </div>
 </template>
 <script>
+import {postRegisterFormInfo,getRegisterFormInfos} from "@/api/eventService.js"
     export default {
         data(){
             return{
@@ -94,19 +95,22 @@
                 }
                 return obj
             },
+            
             registerFormInfo() {
                 const formData = new FormData();
                 Object.keys(this.questionData()).forEach((key) => {
                     formData.append(key, this.questionData()[key]);
                 });
-                this.$http.post(this.requestUrl+"/question/social/"+this.eventId,formData).then(res =>{
-                    if(res.data.rspCode == 1){
+                // this.$http.post(this.requestUrl+"/question/social/"+this.eventId,formData).then(res =>{
+                postRegisterFormInfo(this.eventId,this.questionData()).then(res =>{
+                   if(res.data.rspCode == 1){
                         alert("保存成功")
                     }
                 })
             },
-            getRegisterFormInfo(){
-                this.$http.get(this.requestUrl+"/question/list/"+this.eventId,{params:{webId:this.eventId}}).then(res =>{
+            getRegisterFormInfo(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                // this.$http.get(this.requestUrl+"/question/list/"+this.eventId,{params:{webId:this.eventId}}).then(res =>{
+                    getRegisterFormInfos(this.eventId,this.eventId).then(res =>{
                     res.data.data.filter(item => {
                         if(item.type == 'SOCIAL_WECHAT'){
                             this.checkedQuestion.push(7)

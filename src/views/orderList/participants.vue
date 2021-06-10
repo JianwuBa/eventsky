@@ -1,57 +1,103 @@
 <template>
     <div class="container">
         <div class="search">
-            <el-input v-model="input" placeholder="姓名/手机/邮箱" class="search-input"></el-input>
+            <el-input  placeholder="姓名/手机/邮箱" class="search-input"></el-input>
             <el-button class="search-btn">查询</el-button>
         </div>
-        <div class="participants-table">
-              <el-table :data="tableData" stripe="true"  style="width: 100%">
-                <el-table-column highlight-current-row = true
-                prop="date"
-                label="日期"
-                width="180">
-                </el-table-column>
-                <el-table-column
+         <el-table
+            :data="participantsData"
+            style="width: 100%">
+            <el-table-column
                 prop="name"
                 label="姓名"
-                width="180">
-                </el-table-column>
-                <el-table-column
-                prop="address"
-                label="地址">
-                </el-table-column>
-            </el-table>
-        </div>
+                >
+            </el-table-column>
+            <el-table-column
+                prop="phone"
+                label="手机"
+                >
+            </el-table-column>
+            <el-table-column
+                prop="email"
+                label="邮箱">
+            </el-table-column>
+            <el-table-column
+                prop="company"
+                label="公司">
+            </el-table-column>
+            <el-table-column
+                prop="job"
+                label="职务">
+            </el-table-column>
+
+            <el-table-column
+                prop="goodsItemName"
+                label="票种">
+            </el-table-column>
+            <el-table-column
+                prop="ohers"
+                label="其它信息">
+            </el-table-column>
+        </el-table>
+        {{participantsList}}
+        
     </div>
 </template>
 
 <script>
+ import {getOrderLists} from '@/api/orderService.js'
     export default {
-       
-        data() {
-            return {
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }]
+        props:["participantsList"],
+        data(){
+            return{
+                participantsData:[]
             }
         },
-        methods: {
-          
+        methods:{
+             orderLists(){
+                getOrderLists().then(res => {
+                    // console.log(res)
+                    if(res.data.rspCode == 1){
+                        let data = res.data.data
+                        let obj = new Object;
+                        data.results.forEach(item => {
+                            // console.log(item)
+                            item.items.forEach(ticType => {
+                                obj.goodsItemName = ticType.goodsItemName
+                            })
+                            let others = "";
+                            item.buyerInfos.forEach(items => {
+                                //console.log(items)
+                                if(items.titleKey == "name"){
+                                    obj.name = items.content
+                                }
+                                else if(items.titleKey == "phone"){
+                                    obj.phone = items.content
+                                }
+                                else if(items.titleKey == "email"){
+                                    obj.email = items.content
+                                }
+                                else if(items.titleKey == "company"){
+                                    obj.company = items.content
+                                }
+                                else if(items.titleKey == "job"){
+                                    obj.job = items.content
+                                }
+                                else{
+                                   others = items.title + ":" + items.content;
+                                }
+                            })
+                            obj.others = others;
+                            this.participantsData.push(obj)
+                        })
+                        // console.log(this.participantsData)
+                    }
+                })
+            }
         },
+        created(){
+            this.orderLists()
+        }
     }
 </script>
 

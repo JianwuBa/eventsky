@@ -96,7 +96,7 @@
                 this.$router.push('/login')
             },
             eventDetail(val){
-                window.location.href = "http://192.168.1.216:8080/#/event/" + val
+                window.location.href = "https://www.eventsky.cn/event/" + val
             }
         }
     };

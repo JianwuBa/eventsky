@@ -34,19 +34,25 @@ export default {
 
                     "title":'直播设置',
                     "path":"/live",
-                    "imgIcon":require("@/assets/image/sjfx.png")
+                    "imgIcon":require("@/assets/image/zbsz.png")
                 },
                 {
 
                     "title":'基本信息',
                     "path":"/event/detail/"+this.webId,
-                    "imgIcon":require("@/assets/image/sjfx.png")
+                    "imgIcon":require("@/assets/image/jbxx.png")
                 },
                 {
 
                     "title":'报名及票务',
                     "path":"/stepevent/price/"+this.webId,
-                    "imgIcon":require("@/assets/image/sjfx.png")
+                    "imgIcon":require("@/assets/image/bmpw.png")
+                },
+                {
+
+                    "title":'参会者',
+                    "path":"/order-list",
+                    "imgIcon":require("@/assets/image/chz.png")
                 }
             ]
         }
@@ -70,7 +76,8 @@ export default {
 <style lang="less" scoped>
     .navIcon{
         height: 18px;
-        margin-right: 5px;
+        margin-right: 16px;
+        width: 18px;
     }
     /deep/ .el-aside{
         height: 100%;
@@ -89,6 +96,7 @@ export default {
         color: #fff;
         line-height: 42px;
         height: 42px;
+        margin-bottom: 10px;
     }
     /deep/ .el-menu-item.is-active{
         background: #3E62D8;

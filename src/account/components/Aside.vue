@@ -42,8 +42,7 @@ const compony = () =>
 
 const info = () =>
     import ('@/account/info/index');
-const jyjl = () =>
-    import ('@/views/jyjl');
+
 const eventList = () =>
     import ("@/account/eventList/index");
 
@@ -62,17 +61,16 @@ export default {
               path: '/compony',
               comm: compony,
               title: '公司设置',
-              icon: 'el-icon-location',
+              icon: 'el-icon-office-building',
           },
           {
               id: 2,
               path: '/account',
               comm: info, // vue 的文件名字
               title: '账户管理',
-              icon: 'el-icon-location',
+              icon: 'el-icon-bank-card',
               children: [
-                  { id: 11, title: '注册信息', icon: 'el-icon-menu', path: '/account/info', comm: info },
-                  { id: 12, title: '交易记录', icon: 'el-icon-menu', path: '/account/jyjl', comm: jyjl },
+                  { id: 11, title: '注册信息', icon: '', path: '/account/info', comm: info },
               ]
           },
           {
@@ -80,7 +78,7 @@ export default {
               path: '/event-list',
               comm: eventList,
               title: '活动列表',
-              icon: 'el-icon-location',
+              icon: 'el-icon-wind-power',
 
           }]
         }

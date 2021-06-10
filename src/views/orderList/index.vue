@@ -33,11 +33,12 @@
     import InfoTit from "@/account/components/InfoTit"
     import OrderList from "@/views/orderList/orderList"
     import ParticipantsList from "@/views/orderList/participants"
+   
     export default {
         data() {
             return{
                 //默认第一个选项卡
-                activeName: "participants",
+                activeName: "order",
                 isParticipants:true,
                 isOrder:true,
             }
@@ -50,6 +51,7 @@
             ParticipantsList
         },
         methods:{
+            //参会者和订单列表切换
             OrderType(tab) {
                 if(tab.name == "participants") {
                     this.isParticipants = true;
@@ -58,7 +60,11 @@
                     this.isParticipants = false;
                     this.isOrder = true;
                 }
-            }
+            },
+           
+        },
+        created(){
+            
         }
     };
 </script>

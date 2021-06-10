@@ -83,10 +83,9 @@
 </template>
 
 <script>
-
+import {getTicList,postSaveTic,postSaveChangeTic} from "@/api/eventService.js"
 export default {
     name: "index",
-    
     data() {
         return {
             createTicBtn:true,
@@ -192,8 +191,8 @@ export default {
     methods: {
         //获取门票列表
         getTicForm(){
-            this.$http.get(this.requestUrl+"/event_set/price_list/"+this.eventId).then(res =>{
-               
+            // this.$http.get(this.requestUrl+"/event_set/price_list/"+this.eventId).then(res =>{
+               getTicList(this.eventId).then(res =>{
                 this.ticArray = res.data.data
                 //console.log(this.ticArray)
             })
@@ -216,12 +215,13 @@ export default {
         saveInfo(addTicketInfoForm) {
             this.$refs[addTicketInfoForm].validate((valid) => {
                 if (valid) {
-                    const formData = new FormData();
-                    Object.keys(this.delTicFormData()).forEach((key) => {
-                        formData.append(key, this.delTicFormData()[key]);
-                    });
+                    // const formData = new FormData();
+                    // Object.keys(this.delTicFormData()).forEach((key) => {
+                    //     formData.append(key, this.delTicFormData()[key]);
+                    // });
                     this.dialog = false;
-                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                    // this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                        postSaveTic(this.delTicFormData()).then(res => {
                         if(res.data.rspCode == 400007){
                             this.$router.push('/login')
                         }
@@ -247,7 +247,8 @@ export default {
                         formData.append(key, this.delTicFormData()[key]);
                     });
                     this.dialog = false;
-                    this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                    // this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
+                    postSaveChangeTic(this.delTicFormData()).then(res =>{
                         if(res.data.rspCode == 400007){
                             this.$router.push('/login')
                         }
