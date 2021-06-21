@@ -22,5 +22,6 @@ export default {
         bottom: 0;
         height: 140px;
         line-height: 140px;
+        padding: 0;
     }
 </style>

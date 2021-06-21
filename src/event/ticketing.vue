@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <el-container>
-            <Aside></Aside>
+            <Aside :webId="webId"></Aside>
             <el-container class="aside">
                 
                 <el-header class="event-create-head">
-                    <Head></Head>
+                    <Head :webId="webId"></Head>
                 </el-header>
                 <el-main>
                     <div class="container">
@@ -38,6 +38,7 @@
     export default {
         data() {
             return {
+                webId:'',
                 labelPosition: 'top', 
                 activeName: 'ticket', 
                 isTicket:true,
@@ -60,6 +61,10 @@
                     this.isRegister = true
                 }
             }
+        },
+        created(){
+            this.webId = this.$route.params.pathMatch
+            console.log()
         }
     };
 </script>

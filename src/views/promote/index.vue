@@ -1,7 +1,7 @@
 <template>
     <div>
          <el-container>
-        <Aside></Aside>
+        <Aside :webId="eventId"></Aside>
         <el-container class="aside">
             <el-header class="event-create-head">
                 <Head></Head>
@@ -107,6 +107,7 @@
     import TinymceEditor from "./components/tinymce-editor"
     // 编辑器顶部导航icon
     import 'tinymce/icons/default/icons.min.js'
+    import {getEventDetailShow,postEventDetail} from "@/api/eventService.js"
     export default {
         components:{
             Head,
@@ -127,7 +128,7 @@
                 skin: 'oxide',
 
                 upload:{
-                    url:'/file-service/upload',
+                    url:'/api/file-service/upload',
                 },
                 fileBanList: [],
                 filePostList:[],
@@ -210,10 +211,23 @@
             // clear () {
             //   this.$refs.editor.clear()
             // }
+            // 活动详细信息
+            eventDetailInfo(){
+                let obj = {
+                    bannelUrl:this.bannerUrl,
+                    detail:this.msg,
+                    posterUrl:this.postUrl,
+                    videoCode:this.videoLink,
+                    videoSource:this.videoResourcesVal,
+                    webId:this.eventId
+                }
+                return obj
+            },
             //提交活动详细信息
             savePromoteInfo(){
                 //var ban = this.bannerUrl
-                this.$http.post(this.requestUrl+"/event_set/detail/"+this.eventId+"?bannelUrl="+this.bannerUrl+"&detail="+this.msg+"&posterUrl="+this.postUrl+"&videoCode="+this.videoLink+"&videoSource="+this.videoResourcesVal+"&webId="+this.eventId+"").then(res => {
+                // this.$http.post(this.requestUrl+"/event_set/detail/"+this.eventId+"?bannelUrl="+this.bannerUrl+"&detail="+this.msg+"&posterUrl="+this.postUrl+"&videoCode="+this.videoLink+"&videoSource="+this.videoResourcesVal+"&webId="+this.eventId+"").then(res => {
+                postEventDetail(this.eventId,this.eventDetailInfo()).then(res => {
                     console.log(res)
                     if(res.data.rspCode == 1){
                         
@@ -223,7 +237,8 @@
             },
             //活动详细信息回显
             getEventDetail(){
-                this.$http.get(this.requestUrl+"/event_set/detail/"+this.eventId+"").then(res =>{
+                // this.$http.get(this.requestUrl+"/event_set/detail/"+this.eventId+"").then(res =>{
+                getEventDetailShow(this.eventId).then(res =>{
                     if(res.data.rspCode == 1){
                         this.detailBtnType = false;
                         let data = res.data.data

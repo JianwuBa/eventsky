@@ -68,7 +68,7 @@ export default {
           var file = blobInfo.blob();//转化为易于理解的file对象
           xhr = new XMLHttpRequest();
           xhr.withCredentials = false;
-          xhr.open('POST', '/file-service/upload');
+          xhr.open('POST', '/api/file-service/upload');
           xhr.onload = function() {
               var json;
               console.log(xhr)

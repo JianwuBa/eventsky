@@ -208,7 +208,7 @@ export default {
             console.log(res)
             if(res.data.rspCode == 1){
               setTimeout(() => {
-                this.$router.push({path:'/info'})
+                this.$router.push({path:'/account/info'})
               }, 1000);
             }
             else if(res.data.rspCode == 1){
@@ -231,10 +231,10 @@ export default {
 
 <style  lang="less" scoped>
   .container{
-    padding-top: 60px;
     .register{
       width: 396px;
       margin: 150px auto 0;
+      padding-bottom: 160px;
       .tit{
         font-size: 24px;
         color: #333;

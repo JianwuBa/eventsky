@@ -5,7 +5,7 @@
             <Head></Head>
         </el-header>
         <el-container class="aside">
-            <Aside></Aside>
+            <Aside :webId="eventId"></Aside>
         <el-container>
                 <el-main>
                     <InfoTit></InfoTit>
@@ -41,6 +41,7 @@
                 activeName: "order",
                 isParticipants:true,
                 isOrder:true,
+                eventId:''
             }
         },
         components:{
@@ -64,7 +65,8 @@
            
         },
         created(){
-            
+            console.log(this.$route.params.pathMatch)
+            this.eventId = this.$route.params.pathMatch
         }
     };
 </script>

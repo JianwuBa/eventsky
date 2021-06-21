@@ -90,17 +90,17 @@ import {postRegisterFormInfo,getRegisterFormInfos} from "@/api/eventService.js"
             //门票问题form数据
             questionData(){
                 let obj = {
-                    webId:this.eventId,
-                    socialType:this.checkedQuestion,
+                    socialType:this.checkedQuestion.toString()
                 }
+                console.log(this.checkedQuestion)
                 return obj
             },
             
             registerFormInfo() {
-                const formData = new FormData();
-                Object.keys(this.questionData()).forEach((key) => {
-                    formData.append(key, this.questionData()[key]);
-                });
+                // const formData = new FormData();
+                // Object.keys(this.questionData()).forEach((key) => {
+                //     formData.append(key, this.questionData()[key]);
+                // });
                 // this.$http.post(this.requestUrl+"/question/social/"+this.eventId,formData).then(res =>{
                 postRegisterFormInfo(this.eventId,this.questionData()).then(res =>{
                    if(res.data.rspCode == 1){
@@ -110,7 +110,7 @@ import {postRegisterFormInfo,getRegisterFormInfos} from "@/api/eventService.js"
             },
             getRegisterFormInfo(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
                 // this.$http.get(this.requestUrl+"/question/list/"+this.eventId,{params:{webId:this.eventId}}).then(res =>{
-                    getRegisterFormInfos(this.eventId,this.eventId).then(res =>{
+                    getRegisterFormInfos(this.eventId).then(res =>{
                     res.data.data.filter(item => {
                         if(item.type == 'SOCIAL_WECHAT'){
                             this.checkedQuestion.push(7)
@@ -124,8 +124,9 @@ import {postRegisterFormInfo,getRegisterFormInfos} from "@/api/eventService.js"
                         if(item.type == 'SOCIAL_ZHIHU'){
                             this.checkedQuestion.push(10)
                         }
+                        return  this.checkedQuestion
                     })
-                    //console.log(this.checkedQuestion)
+                    console.log(this.checkedQuestion)
                 })
                 
             },

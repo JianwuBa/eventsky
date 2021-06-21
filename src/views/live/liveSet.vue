@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <el-container>
-            <Aside></Aside>
+            <Aside :webId="eventId"></Aside>
             <el-container class="aside">
                 <el-header class="event-create-head">
                     <Head></Head>
@@ -23,7 +23,7 @@
                                         <div class="left">
                                             <p class="text"> 给本次活动的主讲嘉宾使用，点击后即可加入开播。</p>
                                             
-                                            <p class="link"> <a href="">https://www.1212121313eventSky.cn</a> </p>
+                                            <p class="link"> <a href="">https://www.eventsky.cn/live/{{eventId}}</a> </p>
                                         </div>
                                         <div class="right">
                                             <img src="@/assets/image/camera.png" alt="">
@@ -114,9 +114,11 @@ import {getLiveInfo} from '@/api/liveService.js'
            liveInfo(){
                getLiveInfo(this.eventId).then(res => {
                     console.log(res)
-                    this.liveViws = res.data.data.eventVO.views
-                    this.banUrl = res.data.data.eventVO.bannelUrl
-                    this.codeUrl = res.data.data.eventVO.barcodeUrl
+                    if(res.data.rspCode == 1){
+                        this.liveViws = res.data.data.eventVO.views
+                        this.banUrl = res.data.data.eventVO.bannelUrl
+                        this.codeUrl = res.data.data.eventVO.barcodeUrl
+                    }
                })
            }
         },

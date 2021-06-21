@@ -27,13 +27,13 @@ export default {
             navList:[
                 {
                     "title":'数据分析',
-                    "path":"/overview",
+                    "path":"/overview/"+this.webId,
                     "imgIcon":require("@/assets/image/sjfx.png")
                 },
                 {
 
                     "title":'直播设置',
-                    "path":"/live",
+                    "path":"/set-live/"+this.webId,
                     "imgIcon":require("@/assets/image/zbsz.png")
                 },
                 {
@@ -51,7 +51,7 @@ export default {
                 {
 
                     "title":'参会者',
-                    "path":"/order-list",
+                    "path":"/order-list/"+this.webId,
                     "imgIcon":require("@/assets/image/chz.png")
                 }
             ]
@@ -64,7 +64,9 @@ export default {
         }
     },
     created () {
+       // console.log(this.webId)
         this.onRouteChanged()
+       // console.log(this.webId,"aside")
     },
     watch: {
         // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可

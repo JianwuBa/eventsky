@@ -5,9 +5,8 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <div class="head-nav">
-                <span >{{$t('INDEX_申请试用')}}</span>
+                <span @click="register">免费注册</span>
                 <span @click="login">登陆</span>
-                <span @click="register">注册</span>
                 <span  @click="langZh">中文</span>
                 <span @click="langEn"> English</span>
             </div>

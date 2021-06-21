@@ -59,6 +59,9 @@
                     this.isChangePass = true;
                 }
             }
+        },
+        created(){
+            this.webId = this.$route.query.webId
         }
     };
 </script>

@@ -61,7 +61,7 @@
                         let data = res.data.data
                         let obj = new Object;
                         data.results.forEach(item => {
-                            console.log(item)
+                            // console.log(item)
                             //订单号
                             obj.orderNo = item.orderNo
                             //报名种类

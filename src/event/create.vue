@@ -96,7 +96,7 @@
                 SaveBtnState:false,
                 startDate:'',
                 //请求路径
-                requestUrl:'/event-service',
+                //requestUrl:'/event-service',
                 labelPosition: 'top',  
                 
                 eventRuleForm: {
@@ -239,6 +239,8 @@
                                 this.$router.push({path:"event",query:{webId:+this.eventRuleForm.eventWebId}})
                                 this.SaveBtnState = true;
                                 this.getEventInfo(this.eventRuleForm.eventWebId)
+                                // this.$router.push("/event/"+this.eventRuleForm.eventWebId+"")
+                                location.reload();
                             }
                         })
                     } else {

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import {getTicList,postSaveTic,postSaveChangeTic} from "@/api/eventService.js"
+import {getTicList,postSaveTic,postSaveChangeTic,deleteTic} from "@/api/eventService.js"
 export default {
     name: "index",
     data() {
@@ -221,16 +221,12 @@ export default {
                     // });
                     this.dialog = false;
                     // this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
-                        postSaveTic(this.delTicFormData()).then(res => {
-                        if(res.data.rspCode == 400007){
-                            this.$router.push('/login')
-                        }
+                    postSaveTic(this.eventId,this.delTicFormData()).then(res => {
                         if(res.data.rspCode == 1){
                             this.dialog = false;
                             location.reload();
                             this.addTicketInfoForm = {};
                         }
-                        console.log(res)
                     })
                 } else {
                     console.log('error submit!!');
@@ -242,16 +238,16 @@ export default {
         saveTicChange(addTicketInfoForm){
             this.$refs[addTicketInfoForm].validate((valid) => {
                 if (valid) {
-                    const formData = new FormData();
-                    Object.keys(this.delTicFormData()).forEach((key) => {
-                        formData.append(key, this.delTicFormData()[key]);
-                    });
+                    // const formData = new FormData();
+                    // Object.keys(this.delTicFormData()).forEach((key) => {
+                    //     formData.append(key, this.delTicFormData()[key]);
+                    // });
                     this.dialog = false;
                     // this.$http.post(this.requestUrl+"/event_set/price/"+this.eventId,formData).then(res => {
-                    postSaveChangeTic(this.delTicFormData()).then(res =>{
-                        if(res.data.rspCode == 400007){
-                            this.$router.push('/login')
-                        }
+                    postSaveChangeTic(this.eventId,this.delTicFormData()).then(res =>{
+                        // if(res.data.rspCode == 400007){
+                        //     this.$router.push('/login')
+                        // }
                         if(res.data.rspCode == 1){
                             this.dialog = false;
                             location.reload();
@@ -277,7 +273,8 @@ export default {
         },
         //删除票种
         delTic(id){
-            this.$http.delete(this.requestUrl + "/event_set/price/"+this.eventId+"?priceId="+id).then(res =>{
+            // this.$http.delete(this.requestUrl + "/event_set/price/"+this.eventId+"?priceId="+id).then(res =>{
+                deleteTic(this.eventId,id).then(res => {
                 console.log(res)
                 if(res.data.rspCode == 1){
                     this.delTICdialogVisible = true

@@ -14,15 +14,23 @@
                 预览
             </div>
         </div>
-        <Aside></Aside>
+        <Aside :webId="eventId"></Aside>
     </div>
 </template>
 
 <script>
     import Aside from "@/components/event/Aside"
     export default {
+        data(){
+            return{
+                eventId:''
+            }
+        },
         components:{
             Aside
+        },
+        created(){
+            this.eventId = this.$route.params.pathMatch
         }
     }
 </script>

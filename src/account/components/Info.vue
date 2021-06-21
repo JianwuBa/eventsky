@@ -104,9 +104,6 @@ export default {
           errorMessageText:''
         };
       },
-    created(){
-        this.getInfo()
-    },
     methods: {
       //修改后的基本信息
       changeInfo(){
@@ -195,7 +192,9 @@ export default {
         })
       }
     },
-   
+   created(){
+        this.getInfo()
+    },
   }
 </script>
 

@@ -201,7 +201,7 @@
       </footer>
   </div>
 </template>
-  <script>
+<script>
   import Head from '@/views/login/components/LoginHead'
   export default {
     data() {

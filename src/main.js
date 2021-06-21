@@ -13,7 +13,10 @@ Vue.prototype.$http = axios;
 
 import Fragment from 'vue-fragment'
 Vue.use(Fragment.Plugin)
-
+    //引入vant
+import Vant from 'vant';
+import 'vant/lib/index.css';
+Vue.use(Vant);
 Vue.use(elementUi)
 
 Vue.config.productionTip = false

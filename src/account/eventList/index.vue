@@ -15,7 +15,7 @@
                             <p class="text">当前没有活动，请去创建新活动</p>
                             <el-button type="success" class="create-event" @click="createEvent">创建新活动</el-button>
                         </div>
-                        <ul class="event-lists" v-if="total_count > 0">
+                        <ul class="event-lists" v-if="total_count">
                             <li v-for="item  in curArr" :key="item.webId" @click="eventDetail(item.webId)">
                                 <div class="top">
                                     <img :src="item.bannelUrl" alt="">
@@ -50,7 +50,7 @@
 <script>
     import Head from "../components/Head"
     import Aside from "../components/Aside"
-    import api from '@/api/api'
+    import {getListAPI} from '@/api/eventService.js'
 
 
  
@@ -85,7 +85,7 @@
             },
             getList() {
                 console.log(this.page)
-                api.getListAPI({'pageSize':this.per_page,'pageNo':this.page}).then(res => {
+                getListAPI({'pageSize':this.per_page,'pageNo':this.page}).then(res => {
                     //数据处理
                     console.log(res)
                     this.curArr = res.data.data.results
@@ -93,7 +93,7 @@
                 }).catch(err => console.log(err))
             },
             createEvent(){
-                this.$router.push('/login')
+                this.$router.push('/event')
             },
             eventDetail(val){
                 window.location.href = "https://www.eventsky.cn/event/" + val

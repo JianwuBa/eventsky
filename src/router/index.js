@@ -76,11 +76,11 @@ const router = new VueRouter({
         },
         //设置直播
         {
-            path: "/live",
+            path: "/set-live",
             component: () =>
                 import ("@/views/live/liveSet"),
             children: [{
-                path: "/live/*",
+                path: "/set-live/*",
                 component: () =>
                     import ("@/views/live/liveSet"),
             }]
@@ -89,19 +89,34 @@ const router = new VueRouter({
         {
             path: "/event-list",
             component: () =>
-                import ("@/account/eventList/index")
+                import ("@/account/eventList/index"),
+            children: [{
+                path: "/event-list/*",
+                component: () =>
+                    import ("@/account/eventList/index"),
+            }]
         },
         //订单列表
         {
             path: "/order-list",
             component: () =>
-                import ("@/views/orderList/index")
+                import ("@/views/orderList/index"),
+            children: [{
+                path: "/order-list/*",
+                component: () =>
+                    import ("@/views/orderList/index"),
+            }]
         },
         //数据统计
         {
             path: "/overview",
             component: () =>
-                import ("@/views/statisticalInfo/index")
+                import ("@/views/statisticalInfo/index"),
+            children: [{
+                path: "/overview/*",
+                component: () =>
+                    import ("@/views/statisticalInfo/index"),
+            }]
         },
         //交易记录
         {
@@ -126,6 +141,26 @@ const router = new VueRouter({
             component: () =>
                 import ("@/account/Nav")
         },
+        {
+            path: '/live',
+            component: () =>
+                import ('@/views/live/index'),
+            children: [{
+                path: "/live/*",
+                component: () =>
+                    import ("@/views/live/index"),
+            }]
+        },
+        {
+            path: '/viewlive',
+            component: () =>
+                import ('@/views/live/viewLive'),
+            children: [{
+                path: "/viewlive/*",
+                component: () =>
+                    import ("@/views/live/viewLive"),
+            }]
+        }
     ]
 })
 
