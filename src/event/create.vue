@@ -32,18 +32,8 @@
                                     </el-select>
                                 </el-form-item>
                                 <el-row  :gutter="20">
-                                    <el-col :span="8">
-                                        <el-form-item prop="timeZoneVal" label="时区" required>
-                                            <el-select v-model="eventRuleForm.timeZoneVal"  placeholder="请选择时区">
-                                                <el-option  v-for="item in eventRuleForm.timeZone"
-                                                    :key="item.value"
-                                                    :label="item.label"
-                                                    :value="item.value">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="16">
+                                   
+                                    <el-col :span="24">
                                         <el-form-item prop="date" label="活动时间" required>
                                             <el-date-picker
                                             v-model="eventRuleForm.date"
@@ -107,7 +97,7 @@
                     date: '',
                     eventForm: 2,
                     adress: '',
-                    timeZoneVal:'',
+                    timeZoneVal:'东八区',
                     timeZone:[
                         {
                             value: '东八区',
@@ -298,6 +288,7 @@
                             console.log(res)
                             if(res.data.rspCode == 1){
                                alert("修改成功")
+                               location.reload()
                             }
                         })
                     } else {

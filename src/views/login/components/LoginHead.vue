@@ -1,8 +1,8 @@
 <template>
     <header class="header">
         <div class="containers">
-            <div class="logo">
-                <img src="@/assets/logo.png" alt="">
+            <div class="logo" @click="goHome">
+                <img src="@/assets/logocn.png" alt="">
             </div>
             <div class="head-nav">
                 <span @click="register">免费注册</span>
@@ -30,6 +30,9 @@ export default {
       },
       register(){
           this.$router.push("/register")
+      },
+      goHome(){
+           this.$router.push("/")
       }
     }
 }
@@ -56,6 +59,7 @@ export default {
   }
   header .logo{
       height: 40px;
+      cursor: pointer;
   }
   header .logo img{
       height: 100%;

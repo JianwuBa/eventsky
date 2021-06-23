@@ -12,7 +12,7 @@
           <el-form-item label="验证码">
             <el-input v-model="authCode" placeholder="请输入验证码">
               <template slot="append">
-                <el-button type="primary" @click="registerCode()">发送验证码</el-button>
+                <el-button type="primary" @click="registerCode()">{{time}}</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -96,6 +96,7 @@ export default {
       }
     };
     return {
+      isClick:true,
       ruleForm:{
         //注册个人信息
         fullName:'',
@@ -130,6 +131,7 @@ export default {
       labelPosition: 'top',
       authCode: '',
       target :null,
+      time: '获取验证码',
       type :"EMAIL_SIGNUP",
       //邮箱和验证码状态
       emailCodeState:true,
@@ -152,13 +154,33 @@ export default {
     },
     registerCode(){
       // this.$http.post("/user-service/auth/send?target="+this.target+"&type=EMAIL_SIGNUP").then(res =>{
-        postRegisterCode(this.target).then(res => {
-        console.log(res)
-        if(res.data.rspCode == 400005){
+        if (/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/.test(this.target)) {
+            postRegisterCode(this.target).then(res => {
+              console.log(res)
+              if(res.data.rspCode == 400005){
+                this.errorMessage = true
+                this.errorMessageText = "该邮箱已注册"
+              }
+            })
+            this.isClick = false
+            let s = 60
+            this.time = s + 's'
+            let interval = setInterval(() => {
+                s--
+                this.time = s + 's'
+                if (s < 0) {
+                this.time = '重新获取'
+                this.isClick = true
+                clearInterval(interval)
+                }
+            }, 1000)
+        }else{
           this.errorMessage = true
-          this.errorMessageText = "该邮箱已注册"
+          this.errorMessageText = "请输入正确的邮箱"
+          setTimeout(() => {
+               this.errorMessage = false
+          }, 1000);
         }
-      })
     },
     registerInformation(){
       // this.$http.post("/user-service/auth/check?type=EMAIL_SIGNUP&target="+this.target+"&authCode="+this.authCode+"").then(res =>{

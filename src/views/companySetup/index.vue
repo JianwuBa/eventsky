@@ -39,7 +39,8 @@
                                         <el-input v-model="componyForm.introduce" placeholder="一句话简要介绍" :value="componyForm.introduce"></el-input>
                                     </el-form-item>
                                     <el-form-item label="公司域名" prop="link">
-                                        <el-input placeholder="填写公司专属域名（支持数字和英文字母的组合，3到20个字符）" :value="componyForm.link" v-model="componyForm.link">
+                                    <span style="font-size:12px;color:#999;">填写公司专属域名（支持数字和英文字母的组合，3到20个字符）</span>
+                                        <el-input placeholder="" :value="componyForm.link" v-model="componyForm.link">
                                             <template slot="prepend">https://</template>
                                             <template slot="append">.eventsky.cn</template>
                                         </el-input>

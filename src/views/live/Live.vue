@@ -88,14 +88,14 @@ import {MixIns} from "@/api/mixins.js"
                  try {
                     await this.startLive()
                     //开始直播
-                    // this.skyStartLive()
+                    this.skyStartLive()
                     //volumeAnimation = requestAnimationFrame(setVolumeWave);
                     this.isLive = false
                 }
                 catch (error) {
                     console.error('start live failed!');
                     console.error(error);
-                    // this.leaveLive();
+                    this.leaveLive();
                     var errorCode = error.code;
                     var errMsg = "开启直播失败,";
                     if (errorCode === 'DEVICE_NOT_FOUND') {

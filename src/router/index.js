@@ -13,7 +13,14 @@ const router = new VueRouter({
     routes: [{
             path: '/',
             component: () =>
-                import ('@/views/Home')
+                import ('@/views/Home'),
+            meta: {
+                title: "活动星空：活动直播和社交 SaaS 平台 | 扩大影响力，连接新未来  EventSky: Virtual Event Hosting SaaS Platform | Video Streaming, Ticketing & Registration, Networking & Knowledge Sharing, Analytics, and More",
+                content: {
+                    keywords: '活动星空 活动 直播 社交  china event exhibition hosting video streaming SaaS networking',
+                    description: ''
+                }
+            }
         },
         {
             path: "/register",
@@ -142,11 +149,11 @@ const router = new VueRouter({
                 import ("@/account/Nav")
         },
         {
-            path: '/live',
+            path: '/live-host',
             component: () =>
                 import ('@/views/live/index'),
             children: [{
-                path: "/live/*",
+                path: "/live-host/*",
                 component: () =>
                     import ("@/views/live/index"),
             }]

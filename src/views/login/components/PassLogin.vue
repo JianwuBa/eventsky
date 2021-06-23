@@ -51,7 +51,7 @@ export default {
                 let token = res.data.data
                 Cookies.set('skyToken', token);
                 setTimeout(() => {
-                  this.$router.push({path:'/account/info'})
+                  this.$router.push({path:'/compony'})
                 }, 100);
               }else if(res.data.rspCode == 0){
                 this.errorMessage = true

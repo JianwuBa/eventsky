@@ -86,7 +86,7 @@ import Cookies from 'js-cookie'
                   Cookies.set('skyToken', token);
                   
                   setTimeout(() => {
-                    this.$router.push({path:'account//info'})
+                    this.$router.push({path:'/compony'})
                   }, 1000);
                 }else if(res.data.rspCode == 400006){
                   this.errorMessage = true,

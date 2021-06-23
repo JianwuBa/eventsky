@@ -5,11 +5,11 @@
         <div class="banner">
             <div class="containers">
                 <div class="left">
-                    <h1 class="title">{{$t('INDEX_活动直播')}}</h1>
-                    <h1 class="title"><span class="title-ji" ></span><span>{{$t('INDEX_及')}}</span> </h1>
-                    <p class="text" >{{$t('INDEX_扩大活动影响力连接活动参加者')}}</p>
-                    <p class="text-phone" >{{$t('INDEX_扩大活动影响力连接活动参加者en')}}</p>
-                    <div class="apply" >{{$t('INDEX_申请试用')}}</div>
+                    <h1 class="title" v-html="$t('INDEX_活动直播')"></h1>
+                    <h1 class="title title-webEn"><span class="title-ji" v-html="$t('INDEX_及')"></span><span v-html="$t('INDEX_社交平台')"></span></h1>
+                    <p class="text" v-html="$t('INDEX_扩大活动影响力连接活动参加者')">{{}}</p>
+                    
+                    <div class="apply" @click="register">免费注册</div>
                 </div>
                 <div class="right">
                     <img src="@/assets/banner-img.png" alt="">
@@ -95,19 +95,19 @@
     </section>
 
     <section class="section-odd">
-      <h1 class="tit">长期活跃的用户社区</h1>
+      <h1 class="tit">{{$t('INDEX_长期活跃的用户社区')}}</h1>
       <div class="containers">
         <div class="left">
             <img src="@/assets/section5-1-img.png" alt="">
         </div>
         <div class="right">
             <ul>
-                <li>以活动抓手，建立长期活跃的用户社区</li>
+                <li>{{$t('INDEX_以活动抓手建立长期活跃的用户社区')}}</li>
                 <li>
-                    活动前、活动中、活动后，侧重点各不同
+                    {{$t('INDEX_活动前活动中活动后侧重点各不同')}}
                 </li>
                 <li>
-                    为活动参加者提供长期的交流社区，提高活动参加者的粘性和活跃度
+                    {{$t('INDEX_为活动参加者提供长期的交流社区提高活动参加者的粘性和活跃度')}}
                 </li>
             </ul>
         </div>
@@ -133,19 +133,19 @@
         </div>
     </section>
     <section class="section-odd">
-      <h1 class="tit">数据驱动：量化、了解、优化、预测活动的效果和趋势</h1>
+      <h1 class="tit">{{$t('INDEX_数据驱动量化了解优化预测活动的效果和趋势')}}</h1>
       <div class="containers">
           <div class="left">
               <img src="@/assets/section5-2-img.png" alt="">
           </div>
           <div class="right">
               <ul>
-                  <li>后台控制：自动收集活动数据，并可视化呈现</li>
+                  <li>{{$t('INDEX_后台控制自动收集活动数据并可视化呈现')}}</li>
                   <li>
-                      量化和了解活动的关键指标：浏览性、互动性、收入等关键指标
+                      {{$t('INDEX_量化和了解活动的关键指标浏览性互动性收入等关键指标')}}
                   </li>
                   <li>
-                      实时优化和预测：活动的效果和趋势
+                      {{$t('INDEX_实时优化和预测活动的效果和趋势')}}
                   </li>
               </ul>
           </div>
@@ -171,19 +171,19 @@
         </div>
     </section>
     <section class="section-odd">
-        <h1 class="tit">轻松运营电商，转化流量</h1>
+        <h1 class="tit"> {{$t('INDEX_轻松运营电商转化流量')}}</h1>
         <div class="containers">
             <div class="left">
                 <img src="@/assets/section6-2-img.png" alt="">
             </div>
             <div class="right">
                 <ul>
-                    <li>售卖活动衍生品（课件、书籍、商品、服务等）</li>
+                    <li> {{$t('INDEX_售卖活动衍生品课件书籍商品服务等')}}</li>
                     <li>
-                        开拓新的收入来源，增加长期稳定的收入
+                         {{$t('INDEX_开拓新的收入来源增加长期稳定的收入')}}
                     </li>
                     <li>
-                        为活动参加者提供新的增值服务
+                         {{$t('INDEX_为活动参加者提供新的增值服务')}}
                     </li>
                 </ul>
             </div>
@@ -212,10 +212,12 @@
     components:{
         Head
     },
-    
-    created:function () {
-        
+    methods:{
+        register(){
+            this.$router.push("/register")
+        },
     }
+    
   }
 </script>
 <style lang="css" scoped>
@@ -324,18 +326,17 @@
       padding-top: 118px;
   }
   .banner .containers .left{
-      flex: 1;        padding-left: 140px;
+      flex: 1;        
+      padding-left: 125px;
 
   }
-  .banner .containers .left .title{
-      font-size: 46px;
-      color: #ffffff;
-      text-align: left;
-      letter-spacing: 20px;
-  }
-  .banner .containers .left .title-en{
-      letter-spacing: 0;
-  }
+    .banner .containers .left .title{
+        font-size: 46px;
+        color: #ffffff;
+        text-align: left;
+        letter-spacing: 20px;
+    }
+
   .banner .containers .left .title:nth-of-type(2){
       margin-bottom: 52px;
       margin-top: 20px;
@@ -465,145 +466,6 @@
   .submit-applySuccess{
       line-height: 42px;
   }
-  @media(max-width: 768px){
-      .containers{
-          width: 100%;
-          overflow: hidden;
-      }
-      section .left{
-          width: 280px;
-      }
-      section .containers{
-          flex-direction: column;
-          padding-top:20px;
-          padding-bottom: 20px;
-          width: 100%;
-      }
-      .banner .containers .right img{
-          width: 260px;
-      }
-      .header-banner{
-          height: 388px;
-      }
-      header .containers{
-          padding: 0 12px;
-          box-sizing: border-box;
-      }
-      header{
-          height: 38px;
-      }
-      header .logo{
-          height: 22px;
-      }
-      header .head-nav span{
-          font-size: 14px;
-          line-height: 38px;
-      }
-      .banner .containers{
-          padding-top: 35px;
-          flex-direction: column;
-      }
-      .responsive-platform .containers img{
-          width: 80%;
-      }
-      .banner{
-          padding-top: 38px;
-      }
-      .banner .containers .left{
-          flex: 100%;
-          text-align: center;
-          padding-left: 0;
-      }
-      .banner .containers .left .title {
-          font-size: 22px;
-          display: inline-block;
-      }
 
-      .banner .containers .left .title .title-ji{
-          font-size: 18px;
-      }
-      .banner .containers .left .title:nth-of-type(2){
-          margin-bottom: 15px;
-          margin-top: 0;
-      }
-      .banner .containers .left .text{
-          font-size: 14px;
-          margin-bottom: 35px;
-          display: none;
-      }
-      .banner .containers .left .text-phone{
-          font-size: 14px;
-          margin-bottom: 35px;
-          display: block;
-      }
-      .banner .containers .left .apply{
-          display: none;
-      }
-      section{
-          padding-top: 20px;
-      }
-      section .tit{
-          font-size: 16px;
-          padding: 0 16px;
-          line-height: 20px;
-      }
-      section .right{
-          padding-left:20px;
-          padding-right: 12px;
-          margin-top: 20px;
-          box-sizing: border-box;
-      }
-      section .right ul li{
-          font-size: 12px;
-          padding-left: 15px;
-      }
-      section.section-even .containers{
-          flex-direction: column;
-      }
-      section .right ul li::before{
-          top: 3px;
-      }
-      .responsive-platform .containers{
-          padding-top: 30px;
-          padding-bottom: 84px;
-      }
-      footer{
-          display: none;
-      }
-      .footer-btn{
-          display: block;
-          width: 100%;
-          background: #027AFF;
-          text-align: center;
-          color: #fff;
-          line-height: 44px;
-          position: fixed;
-          left: 0;
-          bottom: 0;
-      }
-      .apply-dialig{
-          width: 90%;
-          margin-left: -45%;
-      }
-      .submit-apply{
-          line-height: 40px;
-          margin-top: 20px;
-      }
-      .apply-modal-body{
-        padding: 15px 10px;
-      }
-      .apply-infortmations{
-          line-height: 36px;
-      }
-      .apply-infortmations input.text{
-          height: 36px;
-      }
-      .banner .containers .left .title{
-          letter-spacing: 10px;
-      }
-      .banner .containers .left .title-en{
-          letter-spacing: 0;
-      }
-  }
 
 </style>

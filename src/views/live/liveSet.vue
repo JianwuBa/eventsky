@@ -23,7 +23,7 @@
                                         <div class="left">
                                             <p class="text"> 给本次活动的主讲嘉宾使用，点击后即可加入开播。</p>
                                             
-                                            <p class="link"> <a href="">https://www.eventsky.cn/live/{{eventId}}</a> </p>
+                                            <p class="link"> <a :href="'/live-host/'+eventId">https://www.eventsky.cn/live/{{eventId}}</a> </p>
                                         </div>
                                         <div class="right">
                                             <img src="@/assets/image/camera.png" alt="">

@@ -25,6 +25,11 @@
                                     <p class="dic">{{item.digest}}</p>
                                     <p class="date">{{item.beginDate}}</p>
                                 </div>
+                                <p class="edit-event">
+                                    <a :href="'/event?webId='+item.webId">
+                                        <img src="@/assets/edit-event.png" alt="">
+                                    </a>
+                                </p>
                             </li>
                         </ul>
                         <el-pagination
@@ -62,8 +67,8 @@
                 curArr:[],//当前也的数据
                 page:null,//当前第几页
                 per_page:8,//每一页最多显示多少条数据
-                total_count:null,//总共多少条数据
-                eventArr:[]
+                total_count:0,
+                eventId:''
             }
         },
         components:{
@@ -71,10 +76,11 @@
             Aside,
         },
         created(){
+            console.log(this.$route)
+            // this.eventId = this.$route.
             this.getList()
         },
         methods:{
-            
              handleSizeChange(val){
                 this.per_page = val
                 this.getList()
@@ -137,6 +143,7 @@
             margin-right: 1%;
             border-radius: 10px;
             overflow: hidden;
+            position: relative;
             &:nth-child(4n+4){
                 margin-right: 0;
             }
@@ -174,6 +181,17 @@
                     color: #333;
                     overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                     margin-top: 20px;
+                }
+            }
+            .edit-event{
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                right:10px ;
+                top: 10px;
+                cursor: pointer;
+                img{
+                    width: 100%;
                 }
             }
         }
